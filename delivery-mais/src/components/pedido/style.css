@@ -1,0 +1,24 @@
+.pedido {
+    border-radius: 8px;
+
+}
+
+.pedido a {
+    color: rgb(53, 53, 53);
+    text-decoration: none;
+}
+
+.pedido:hover {
+    background: rgb(238, 238, 238);
+    text-decoration: none;
+};
+
+.pedido span {
+    color: rgb(51, 51, 51);
+    font: 14px;
+    padding: 4px;
+}
+
+.img-pedido {
+    max-width: 100%;
+}
