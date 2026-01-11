@@ -105,10 +105,7 @@ function Login(props) {
 
                 {
                     sucesso === 'N' ?
-                        <div className="alert alert-danger mt-2" role="alert">
-                            {mensagem}
-                        </div>
-                        : null
+                        <div className="alert alert-danger mt-2" role="alert"> {mensagem} </div> : null
                 }
 
 

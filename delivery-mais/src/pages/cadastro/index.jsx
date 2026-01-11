@@ -4,6 +4,8 @@ import { useState } from 'react';
 import './style.css';
 import Logo from '../../assets/logo-pb.png';
 import Fundo from '../../assets/fundo-login.jpg';
+import api from '../../services/api';
+import SaltPassword from '../../services/md5.js';
 
 
 
@@ -24,7 +26,7 @@ function Cadastro(props) {
     const [cep, setCep] = useState("");
 
     const [mensagem, setMensagem] = useState("");
-    const [loading, setLoading] = useState(false);  
+    const [loading, setLoading] = useState(false);
 
 
     function SalvarCidade(e) {
@@ -34,10 +36,59 @@ function Cadastro(props) {
         setUf(est);
         setCodCidade(e.target.value);
     }
-    
 
+    function ProcessaCadastro(e) {
+        e.preventDefault();
 
-        return <div className='row'>
+        setMensagem("");
+        setLoading(true);
+
+        if (senha !== senha2) {
+            setMensagem("As senhas não conferem.");
+            setLoading(false);
+            return;
+        }
+
+        api.post("v1/usuarios/registro", {
+
+            nome: nome,
+            email: email,
+            senha: senha.length > 0 ? SaltPassword(senha) : "",
+            endereco: endereco,
+            complemento: complemento,
+            bairro: bairro,
+            cidade: cidade,
+            uf: uf,
+            cod_cidade: codCidade,
+            cep: cep
+        })
+            .then(response => {
+                if (response.status === 201) {
+                    localStorage.setItem('sessionToken', JSON.stringify(response.data.token));
+                    localStorage.setItem('sessionId', JSON.stringify(response.data.id_usuario));
+                    localStorage.setItem('sessionEmail', JSON.stringify(email));
+                    localStorage.setItem('sessionCodCidade', JSON.stringify(codCidade));
+                    localStorage.setItem('sessionCidade', JSON.stringify(cidade));
+                    localStorage.setItem('sessionUf', JSON.stringify(uf));
+                    navigate('/');
+                }else {
+                    setMensagem("Erro ao cadastrar usuário." + response.status);
+                    setLoading(false);
+                }
+            })
+            .catch(err => {
+                if (err.response) {
+                    setMensagem(err.response.data.erro);
+                    console.log(err);
+                } else {
+                    setMensagem("Ocorreu um erro na requisição");
+                    console.log("Ocorreu um erro na requisição");
+                }             
+                setLoading(false);
+            });
+    }
+
+    return <div className='row'>
 
         <div className='col-sm-6 d-flex justify-content-center align-items-center text-center'>
 
@@ -46,25 +97,25 @@ function Cadastro(props) {
                 <h6 className='mb-3'>Informe os dados abaixo</h6>
 
                 <div className='form-floating'>
-                    <input                         
-                        type="text" 
-                        className='form-control' 
-                        id="floatingInput" 
-                        placeholder='Nome completo' 
-                        value={nome} 
-                        onChange={e => setNome(e.target.value)} 
+                    <input
+                        type="text"
+                        className='form-control'
+                        id="floatingInput"
+                        placeholder='Nome completo'
+                        value={nome}
+                        onChange={e => setNome(e.target.value)}
                     />
                     <label for="floatingInput">Nome Completo</label>
                 </div>
 
                 <div className='form-floating'>
-                    <input 
-                        type="email" 
-                        className='form-control' 
-                        id="floatingInput" 
-                        placeholder='E-mail' 
-                        value={email} 
-                        onChange={e => setEmail(e.target.value)} 
+                    <input
+                        type="email"
+                        className='form-control'
+                        id="floatingInput"
+                        placeholder='E-mail'
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
                     />
                     <label for="floatingInput">E-mail</label>
                 </div>
@@ -72,11 +123,11 @@ function Cadastro(props) {
                 <div className='row'>
                     <div className='col-lg-6'>
                         <div className='form-floating'>
-                            <input 
-                                type="password" 
-                                className="form-control" 
-                                id="floatingInput" 
-                                placeholder='Digite sua senha' 
+                            <input
+                                type="password"
+                                className="form-control"
+                                id="floatingInput"
+                                placeholder='Digite sua senha'
                                 value={senha}
                                 onChange={e => setSenha(e.target.value)}
                             />
@@ -86,11 +137,11 @@ function Cadastro(props) {
 
                     <div className='col-lg-6'>
                         <div className='form-floating'>
-                            <input 
-                                type="password" 
-                                className="form-control" 
-                                id="floatingInput" 
-                                placeholder='Confirme a senha' 
+                            <input
+                                type="password"
+                                className="form-control"
+                                id="floatingInput"
+                                placeholder='Confirme a senha'
                                 value={senha2}
                                 onChange={e => setSenha2(e.target.value)}
                             />
@@ -103,11 +154,11 @@ function Cadastro(props) {
                 <div className='row'>
                     <div className='col-lg-8'>
                         <div className='form-floating'>
-                            <input 
-                                type="text" 
-                                className='form-control' 
-                                placeholder='Endereço' 
-                                id="floatingInput" 
+                            <input
+                                type="text"
+                                className='form-control'
+                                placeholder='Endereço'
+                                id="floatingInput"
                                 value={endereco}
                                 onChange={e => setEndereco(e.target.value)}
                             />
@@ -117,11 +168,11 @@ function Cadastro(props) {
 
                     <div className='col-lg-4'>
                         <div className='form-floating'>
-                            <input 
-                                type="text" 
-                                className='form-control' 
-                                placeholder='Complemento' 
-                                id="floatingInput" 
+                            <input
+                                type="text"
+                                className='form-control'
+                                placeholder='Complemento'
+                                id="floatingInput"
                                 value={complemento}
                                 onChange={(e) => setComplemento(e.target.value)}
                             />
@@ -133,11 +184,11 @@ function Cadastro(props) {
                 <div className='row'>
                     <div className='col-lg-7'>
                         <div className='form-floating'>
-                            <input 
-                                type="text" 
-                                className='form-control' 
-                                placeholder='Bairro' 
-                                id="floatingInput" 
+                            <input
+                                type="text"
+                                className='form-control'
+                                placeholder='Bairro'
+                                id="floatingInput"
                                 value={bairro}
                                 onChange={e => setBairro(e.target.value)}
                             />
@@ -160,11 +211,35 @@ function Cadastro(props) {
                 </div>
 
                 <div className='form-floating'>
-                    <input type="text" className='form-control' id="floatingInput" placeholder='CEP' />
-                    <label for="floatingInput">CEP</label>                    
+                    <input
+                        type="text"
+                        className='form-control'
+                        id="floatingInput"
+                        placeholder='CEP'
+                        value={cep}
+                        onChange={(e) => setCep(e.target.value)}
+                    />
+                    <label for="floatingInput">CEP</label>
                 </div>
 
-                <button className='btn btn-lg btn-danger w-100 mt-3'>Criar Conta</button>
+                <button onClick={ProcessaCadastro} className='btn btn-lg btn-danger w-100 mt-3'>
+                    {
+                        loading ?
+                            <div>
+                                <span class="spinner-border spinner-border-sm text-light mt-0" role="status"></span>
+                                <span className='ms-2'>Enviando...</span>
+                            </div>
+                            : <span className='ms-2'>Criar minha conta</span>
+                    }
+                </button>
+
+                {
+                    mensagem.length > 0 ?
+                        <div className='alert alert-danger mt-3' role="alert">
+                            {mensagem}
+                        </div>
+                        : null
+                }
 
                 <div className='mt-5'>
                     <Link to={"/login"}>Já tenho uma conta. Fazer login!</Link>
