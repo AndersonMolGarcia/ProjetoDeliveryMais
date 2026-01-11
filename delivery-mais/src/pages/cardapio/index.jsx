@@ -38,7 +38,7 @@ function Cardapio(props) {
                     [1, 2, 3].map(categoria => {
 
                         return (
-                            <div className='row mt-5'>
+                            <div key={categoria} className='row mt-5'>
 
                                 <div className='mb-3'>
                                     <h5>Destaques</h5>
@@ -47,7 +47,7 @@ function Cardapio(props) {
                                 {
                                     [1, 2, 3, 4, 5].map(produto => {
 
-                                        return <Produto />
+                                        return <Produto key={produto} />
                                     })
                                 }
                             </div>

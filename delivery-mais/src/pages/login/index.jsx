@@ -92,7 +92,7 @@ function Login(props) {
                     {
                         loading ? 
                             <div>
-                                <span class="spinner-border spinner-border-sm text-light mt-0" role="status"></span> 
+                                <span className="spinner-border spinner-border-sm text-light mt-0" role="status"></span> 
                                 <span className='ms-2'>Enviando...</span>
                             </div>
                             

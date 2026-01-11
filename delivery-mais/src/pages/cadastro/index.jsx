@@ -1,6 +1,6 @@
 
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './style.css';
 import Logo from '../../assets/logo-pb.png';
 import Fundo from '../../assets/fundo-login.jpg';
@@ -24,6 +24,8 @@ function Cadastro(props) {
     const [uf, setUf] = useState("");
     const [codCidade, setCodCidade] = useState("");
     const [cep, setCep] = useState("");
+
+    const [cidades, setCidades] = useState([]); 
 
     const [mensagem, setMensagem] = useState("");
     const [loading, setLoading] = useState(false);
@@ -88,6 +90,17 @@ function Cadastro(props) {
             });
     }
 
+    useEffect(() => {
+        api.get("v1/cidades")
+            .then(response => {
+                setCidades(response.data);    
+            })
+            .catch(err => {
+                console.log(err);
+                setMensagem("Ocorreu um erro ao buscar as cidades." + err.response.erro);
+            });    
+    }, []);
+
     return <div className='row'>
 
         <div className='col-sm-6 d-flex justify-content-center align-items-center text-center'>
@@ -100,24 +113,24 @@ function Cadastro(props) {
                     <input
                         type="text"
                         className='form-control'
-                        id="floatingInput"
+                        id="nome"
                         placeholder='Nome completo'
                         value={nome}
                         onChange={e => setNome(e.target.value)}
                     />
-                    <label for="floatingInput">Nome Completo</label>
+                    <label htmlFor ="nome">Nome Completo</label>
                 </div>
 
                 <div className='form-floating'>
                     <input
                         type="email"
                         className='form-control'
-                        id="floatingInput"
+                        id="email"
                         placeholder='E-mail'
                         value={email}
                         onChange={e => setEmail(e.target.value)}
                     />
-                    <label for="floatingInput">E-mail</label>
+                    <label htmlFor ="email">E-mail</label>
                 </div>
 
                 <div className='row'>
@@ -126,12 +139,12 @@ function Cadastro(props) {
                             <input
                                 type="password"
                                 className="form-control"
-                                id="floatingInput"
+                                id="senha"
                                 placeholder='Digite sua senha'
                                 value={senha}
                                 onChange={e => setSenha(e.target.value)}
                             />
-                            <label for="floatingInput">Senha</label>
+                            <label htmlFor="senha">Senha</label>
                         </div>
                     </div>
 
@@ -140,12 +153,12 @@ function Cadastro(props) {
                             <input
                                 type="password"
                                 className="form-control"
-                                id="floatingInput"
+                                id="senha2"
                                 placeholder='Confirme a senha'
                                 value={senha2}
                                 onChange={e => setSenha2(e.target.value)}
                             />
-                            <label for="floatingInput">Confirme a Senha</label>
+                            <label htmlFor="senha2">Confirme a Senha</label>
                         </div>
                     </div>
 
@@ -158,11 +171,11 @@ function Cadastro(props) {
                                 type="text"
                                 className='form-control'
                                 placeholder='Endereço'
-                                id="floatingInput"
+                                id="endereco"
                                 value={endereco}
                                 onChange={e => setEndereco(e.target.value)}
                             />
-                            <label for="floatingInput">Endereço</label>
+                            <label htmlFor="endereco">Endereço</label>
                         </div>
                     </div>
 
@@ -172,11 +185,11 @@ function Cadastro(props) {
                                 type="text"
                                 className='form-control'
                                 placeholder='Complemento'
-                                id="floatingInput"
+                                id="complemento"
                                 value={complemento}
                                 onChange={(e) => setComplemento(e.target.value)}
                             />
-                            <label for="floatingInput">Complemento</label>
+                            <label htmlFor="complemento">Complemento</label>
                         </div>
                     </div>
                 </div>
@@ -188,11 +201,11 @@ function Cadastro(props) {
                                 type="text"
                                 className='form-control'
                                 placeholder='Bairro'
-                                id="floatingInput"
+                                id="bairro"
                                 value={bairro}
                                 onChange={e => setBairro(e.target.value)}
                             />
-                            <label for="floatingInput">Bairro</label>
+                            <label htmlFor="bairro">Bairro</label>
                         </div>
                     </div>
 
@@ -200,11 +213,11 @@ function Cadastro(props) {
                         <div className='form-control mb-2'>
                             <select onChange={SalvarCidade} name="cidades" id="cidades">
                                 <option value="0000000">Cidade</option>
-                                <option value="3550308">São Paulo - SP</option>
-                                <option value="3509502">Campinas - SP</option>
-                                <option value="3506003">Bauru - SP</option>
-                                <option value="3506073">Santópolis do Aguapeí - SP</option>
-                                <option value="3506023">Santo Antônio do Aracanguá - SP</option>
+                                {
+                                    cidades.map((c) => {
+                                        return <option key={c.cod_cidade} value={c.cod_cidade}>{c.cidade} - {c.uf}</option>
+                                    })
+                                }
                             </select>
                         </div>
                     </div>
@@ -214,12 +227,12 @@ function Cadastro(props) {
                     <input
                         type="text"
                         className='form-control'
-                        id="floatingInput"
+                        id="cep"
                         placeholder='CEP'
                         value={cep}
                         onChange={(e) => setCep(e.target.value)}
                     />
-                    <label for="floatingInput">CEP</label>
+                    <label htmlFor="cep">CEP</label>
                 </div>
 
                 <button onClick={ProcessaCadastro} className='btn btn-lg btn-danger w-100 mt-3'>
