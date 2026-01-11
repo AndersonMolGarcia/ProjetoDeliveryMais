@@ -1,17 +1,20 @@
 import './style.css';
 import Logo from '../../assets/logo-pb.png';
 import Fundo from '../../assets/fundo-login.jpg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import SaltPassword from '../../services/md5.js';
 import { useState } from 'react';
 import api from '../../services/api.js';
 
 function Login(props) {
 
+    const navigate = useNavigate();
+
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
     const [sucesso, setSucesso] = useState("");
     const [mensagem, setMensagem] = useState("");
+    const [loading, setLoading] = useState(false);
 
     function ProcessaLogin(e) {
 
@@ -19,18 +22,28 @@ function Login(props) {
 
         setSucesso("");
         setMensagem("");
+        setLoading(true);
 
         api.post('v1/usuarios/login', {
             email: email,
             senha: SaltPassword(senha)
         })
             .then(response => {
+                localStorage.setItem('sessionToken', JSON.stringify(response.data.token));
+                localStorage.setItem('sessionId', JSON.stringify(response.data.id_usuario));
+                localStorage.setItem('sessionEmail', JSON.stringify(email));
+                localStorage.setItem('sessionCodCidade', JSON.stringify(response.data.cod_cidade));
+                localStorage.setItem('sessionCidade', JSON.stringify(response.data.cidade));
+                localStorage.setItem('sessionUf', JSON.stringify(response.data.uf));
+                
                 setSucesso('S');
+                navigate('/');
             })
             .catch(err => {
                 console.log(err);
                 setSucesso('N');
                 setMensagem('E-mail ou senha inválida!');
+                setLoading(false);
             })
 
 
@@ -75,7 +88,18 @@ function Login(props) {
 
 
 
-                <button onClick={ProcessaLogin} className='btn btn-lg btn-danger w-100 mt-3'>Acessar</button>
+                <button onClick={ProcessaLogin} className='btn btn-lg btn-danger w-100 mt-3' disabled={loading}>
+                    {
+                        loading ? 
+                            <div>
+                                <span class="spinner-border spinner-border-sm text-light mt-0" role="status"></span> 
+                                <span className='ms-2'>Enviando...</span>
+                            </div>
+                            
+
+                        : <span className='ms-2'>Acessar</span>
+                    }
+                </button>
 
 
 
