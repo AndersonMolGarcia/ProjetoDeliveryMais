@@ -1,9 +1,10 @@
 import './style.css';
 import Star from "../../assets/star.png";
+import { Link } from 'react-router-dom';
 
 function Estabelecimento(props) {
     return <div className='estabelecimento col-sm-6 col-md-4 col-lg-3 mb-3 p-2'>
-        <a href="#">
+        <Link to={`/cardapio/${props.id_estabelecimento}`}>
             <div className='row'>
                 <div className='col-3'>
                     <img className='img_estabelecimento' src={props.url_imagem} alt="Logotipo" />
@@ -13,7 +14,7 @@ function Estabelecimento(props) {
                     <span>{props.nome}</span>
                     <div className='avaliacao'>
                         <img src={Star} alt="Avaliação" />
-                        <span>{props.avaliacao} - {props.categoria}</span>
+                        <span>{props.avaliacao.toFixed(1)} - {props.categoria}</span>
                     </div>
 
                     {
@@ -22,7 +23,7 @@ function Estabelecimento(props) {
 
                 </div>
             </div>
-        </a>
+        </Link>
 
     </div>
 }
