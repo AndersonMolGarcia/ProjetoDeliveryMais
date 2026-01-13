@@ -1,9 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import './style.css';
+import { useState } from "react";
 
 
 function Navbar() {
+
+    
+    const navigate = useNavigate();
+    const [busca, setBusca] = useState("");
+    
+    function Buscar() {
+        navigate(`/busca?q=${busca}`);        
+    }
 
     function openSidebar() {
         const event = new CustomEvent('openSidebar');
@@ -13,15 +22,22 @@ function Navbar() {
     return (
         <nav className="navbar navbar-light fixed-top navbar-expand-lg bg-light ps-3 pe-3">
             <div className="container-fluid">
-                <a className="navbar-brand" href="#"><img className="mt-1" src={logo} alt="Logotipo" /></a>
+                <Link className="navbar-brand" to="/"><img className="mt-1" src={logo} alt="Logotipo" /></Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
 
                 <div className="ms-auto me-auto mt-1">
                     <div className="input-group">
-                        <input type="text" className="form-control" placeholder="Procurar um restaurante..." aria-label="Recipient’s username" aria-describedby="button-addon2" />
-                        <button className="btn btn-danger" type="button" id="button-addon2"><i className="fas fa-search"></i>Buscar</button>
+                        <input 
+                            type="text" 
+                            className="form-control" 
+                            placeholder="Procurar um restaurante..." 
+                            aria-label="Recipient’s username" 
+                            aria-describedby="button-addon2" 
+                            onChange={(e) => setBusca(e.target.value)}
+                        />
+                        <button onClick={Buscar} className="btn btn-danger" type="button" id="button-addon2"><i className="fas fa-search"></i>Buscar</button>
                     </div>
                 </div>
 
