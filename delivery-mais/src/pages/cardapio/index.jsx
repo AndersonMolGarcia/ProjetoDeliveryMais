@@ -26,10 +26,11 @@ function Cardapio(props) {
     const [entrega, setEntrega] = useState("");
     const [minimo, setMinimo] = useState("");
     const [qtd, setQtd] = useState("");
-    
 
+    const [categorias, setCategorias] = useState([]);
+    const [produtos, setProdutos] = useState([]);
 
-    useEffect(() => {
+    function ListarEstabelecimentos() {
         api.get(`v1/estabelecimentos/${id}`)
             .then(response => {
                 setNome(response.data[0].nome)                
@@ -45,8 +46,32 @@ function Cardapio(props) {
                 setQtd(response.data[0].qtd_avaliacao)
             })
             .catch(err => {
-
+                console.error(err);
             })
+    }
+
+    function ListarProdutos() {
+        api.get(`v1/cardapios/${id}`)
+            .then(response => {
+                let categoriasUnica = response.data.map(item => item.categoria) 
+                
+                categoriasUnica = categoriasUnica.filter((itemArray, i, arrayCompleto) => {
+                    return arrayCompleto.indexOf(itemArray) === i;
+                })
+
+                setCategorias(categoriasUnica);
+                setProdutos(response.data);
+            })
+            .catch(err => {
+                console.error(err);
+            })
+    }
+    
+
+
+    useEffect(() => {
+        ListarEstabelecimentos();
+        ListarProdutos();
     }, []);
 
 
@@ -95,19 +120,26 @@ function Cardapio(props) {
                 </div>
 
                 {
-                    [1, 2, 3].map(categoria => {
+                    categorias.map(categoria => {
 
                         return (
                             <div key={categoria} className='row mt-5'>
 
                                 <div className='mb-3'>
-                                    <h5>Destaques</h5>
+                                    <h5>{categoria}</h5>
                                 </div>
 
                                 {
-                                    [1, 2, 3, 4, 5].map(produto => {
+                                    produtos.map(produto => {
 
-                                        return <Produto key={produto} />
+                                        return produto.categoria === categoria ? <Produto key={produto}
+                                            nome={produto.nome}
+                                            descricao={produto.descricao}
+                                            vl_produto={produto.vl_produto}
+                                            vl_promocao={produto.vl_promocao}
+                                            url_foto={produto.url_foto}
+                                        />
+                                        : null
                                     })
                                 }
                             </div>
