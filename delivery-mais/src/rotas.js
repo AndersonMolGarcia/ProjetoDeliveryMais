@@ -23,7 +23,7 @@ function Rotas() {
                 <Route exact path="/perfil" element={<Perfil />} />
                 <Route exact path="/enderecos" element={<Enderecos />} />
                 <Route exact path="/pedidos" element={<Pedidos />} />
-                <Route exact path="/cardapio" element={<Cardapio />} />
+                <Route exact path="/cardapio/:id" element={<Cardapio />} />
                 <Route exact path="/login" element={<Login />} />
                 <Route exact path="/cadastro" element={<Cadastro />} />
             </Routes>

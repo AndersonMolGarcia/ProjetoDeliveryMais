@@ -1,11 +1,55 @@
+import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+
 import './style.css';
 import Navbar from '../../components/navbar';
 import Star from "../../assets/star.png";
 import Produto from '../../components/produto/lista';
 import Footer from '../../components/footer';
+import api from '../../services/api';
+
+
 
 
 function Cardapio(props) {
+
+    
+    const {id} = useParams();
+    const [nome, setNome] = useState("");
+    const [endereco, setEndereco] = useState("");
+    const [complemento, setComplemento] = useState("");
+    const [bairro, setBairro] = useState("");
+    const [cidade, setCidade] = useState("");
+    const [uf, setUf] = useState("");
+    const [avaliacao, setAvaliacao] = useState(0);
+    const [urlFoto, seturlFoto] = useState("");
+    const [entrega, setEntrega] = useState("");
+    const [minimo, setMinimo] = useState("");
+    const [qtd, setQtd] = useState("");
+    
+
+
+    useEffect(() => {
+        api.get(`v1/estabelecimentos/${id}`)
+            .then(response => {
+                setNome(response.data[0].nome)                
+                setEndereco(response.data[0].endereco)
+                setComplemento(response.data[0].complemento)
+                setBairro(response.data[0].bairro)
+                setCidade(response.data[0].cidade)
+                setUf(response.data[0].uf)
+                setAvaliacao(response.data[0].avaliacao)    
+                seturlFoto(response.data[0].url_foto)            
+                setEntrega(response.data[0].vl_taxa_entrega)
+                setMinimo(response.data[0].vl_min_pedido)
+                setQtd(response.data[0].qtd_avaliacao)
+            })
+            .catch(err => {
+
+            })
+    }, []);
+
+
 
     return (
 
@@ -15,21 +59,37 @@ function Cardapio(props) {
             <div className='row col-lg-8 offset-lg-2'>
 
                 <div className='col-12'>
-                    <img className='img-fluid rounded img_estabelecimento_cardapio' src="https://lh3.googleusercontent.com/pw/AM-JKLXjiiI6CUyPAeY7N1UF5UWAacWk0pA1G-TDOUHAzr4Eq3g7_LwBl7kVOSlixQ425JXLKSkjeF6ord42ebAUE8GFoq7dtmGDXecy6Eolm0WqGgalR9MP3q0-26z3pCVhp0fo70P8v0KqV4pnv0wC1KOi=w310-h155-no?authuser=0" alt="Estabelecimento" />
+                    <img className='img-fluid rounded img_estabelecimento_cardapio' src={urlFoto} alt="Estabelecimento" />
                 </div>
 
                 <div className='col-12 mt-4'>
-                    <h2>Black Dog Paulista</h2>
-                    <span className='d-block'>R. Coelho Lisboa, 363 - Cidade Mãe do Céu - São Paulo - SP</span>
+                    <h2>{nome}</h2>
+                    <span className='d-block'>{endereco} {complemento.length > 0 ? ' - ' + complemento : null} - {bairro} - {cidade} - {uf}</span>
                     <div className='classificacao'>
                         <img src={Star} alt="Avaliação" />
-                        <span className='ms-1'> 4.0</span>
-                        <span className='ms-3'>18 avaliações</span>
+                        <span className='ms-1'> {avaliacao}</span>
+                        <span className='ms-4'>
+                            {
+                                qtd <=1 ? `${qtd} avaliação` : `${qtd} avaliações`
+                            }
+                        </span>
+                           
+                        
                     </div>
 
                     <div className='classificao mt-3'>
-                        <span className=''><b>Taxa de Entrega: </b>R$ 5,00</span>
-                        <span className='ms-5'><b>Pedido mínimo:</b> R$ 30,00</span>
+                        <span className=''>
+                            <b className='me-2'>Taxa de Entrega: </b>
+                            {
+                                new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(entrega)
+                            }
+                        </span>
+                        <span className='ms-5'>
+                            <b className='me-2'>Pedido mínimo: </b>
+                            {
+                                new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(minimo)
+                            }
+                        </span>
                     </div>
 
                 </div>
