@@ -7,6 +7,7 @@ import Star from "../../assets/star.png";
 import Produto from '../../components/produto/lista';
 import Footer from '../../components/footer';
 import api from '../../services/api';
+import ProdutoModal from '../../components/produto/modal';
 
 
 
@@ -29,6 +30,8 @@ function Cardapio(props) {
 
     const [categorias, setCategorias] = useState([]);
     const [produtos, setProdutos] = useState([]);
+
+    const [isProdutoOpen, setIsProdutoOpen] = useState(false);
 
     function ListarEstabelecimentos() {
         api.get(`v1/estabelecimentos/${id}`)
@@ -76,10 +79,25 @@ function Cardapio(props) {
 
 
 
+    function OpenModalProduto() {
+        setIsProdutoOpen(true);
+    };
+
+    function CloseModalProduto() {
+        setIsProdutoOpen(false);
+    }
+
+
+
     return (
 
         <div className='container-fluid mt-page cardapio'>
             <Navbar />
+
+            <ProdutoModal 
+                isOpen={isProdutoOpen}   
+                onRequestClose={CloseModalProduto}
+            />
 
             <div className='row col-lg-8 offset-lg-2'>
 
@@ -138,6 +156,7 @@ function Cardapio(props) {
                                             vl_produto={produto.vl_produto}
                                             vl_promocao={produto.vl_promocao}
                                             url_foto={produto.url_foto}
+                                            onClickProduto={OpenModalProduto}
                                         />
                                         : null
                                     })
