@@ -3,7 +3,7 @@ import './style.css';
 
 function Produto(props) {
     return <div className="col-sm-6 mb-3 p-4 produto-lista">
-        <a href="#" onClick={props.onClickProduto}>
+        <a onClick={props.onClickProduto}>
 
             <div className='row p-3 ps-0 border-bottom'>
 

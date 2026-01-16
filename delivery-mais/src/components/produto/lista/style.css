@@ -1,6 +1,7 @@
 .produto-lista a{
     text-decoration: none;
     color: rgb(51, 51, 51);
+    cursor: pointer;
 }
 
 .produto-lista:hover {

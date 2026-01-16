@@ -150,7 +150,9 @@ function Cardapio(props) {
                                 {
                                     produtos.map(produto => {
 
-                                        return produto.categoria === categoria ? <Produto key={produto}
+                                        return produto.categoria === categoria ? 
+                                        <Produto 
+                                            key={produto.id_produto}
                                             nome={produto.nome}
                                             descricao={produto.descricao}
                                             vl_produto={produto.vl_produto}
