@@ -6,12 +6,9 @@ body {
     font-family: 'Poppins', sans-serif;
 }
 
-.mt-page {
-    margin-top: 90px;
-}
 
 .react-modal-overlay {
-    background: rgba(0, 0, 0, 0.5);    
+    background: rgba(0, 0, 0, 0.5);
     position: fixed;
     top: 0;
     bottom: 0;
@@ -41,4 +38,32 @@ body {
     top: -15px;
     border: 0;
     background: transparent;
+}
+
+.mt-page {
+    margin-top: 90px;
+}
+
+@media (max-width: 991px) {
+    .mt-page {
+        margin-top: 130px;
+    }
+}
+
+@media (max-width: 768px) {
+    .mt-page {
+        margin-top: 130px;
+    }
+}
+
+@media (max-width: 623px) {
+    .mt-page {
+        margin-top: 150px;
+    }
+}
+
+@media (max-width: 576px) {
+    .mt-page {
+        margin-top: 185px;
+    }
 }

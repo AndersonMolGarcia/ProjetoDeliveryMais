@@ -92,8 +92,9 @@ function Home(){
       
 
     return <>
+        <Navbar />
         <div className="container-fluid mt-page">
-            <Navbar />  
+              
 
             <div className="row justify-content-center text-center">
                 {

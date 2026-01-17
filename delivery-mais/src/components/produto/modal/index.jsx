@@ -2,6 +2,7 @@ import Modal from 'react-modal/lib/components/Modal';
 import './style.css';
 import closeIcon from '../../../assets/close.png';
 import ProdutoItemRadio from '../produto-item-radio';
+import ProdutoItemCheckbox from '../produto-item-checkbox';
 
 function ProdutoModal(props) {
 
@@ -34,12 +35,14 @@ function ProdutoModal(props) {
                         <small className='mt-3 ms-4 preco-antigo'>R$ 60,00</small>
                     </div>
 
-                    <div className='col-12'>
+                    <div className='col-12 mb-4'>
                         <ProdutoItemRadio 
                             obrigatorio
                             titulo="Escolha a borda"
                         />
-                        <h1>Turbine sua Pizza</h1>
+                        <ProdutoItemCheckbox 
+                            titulo="Turbine sua pizza"
+                        />
                     </div>
                 </div>
 
@@ -51,7 +54,7 @@ function ProdutoModal(props) {
                             <button className='btn btn-outline-danger'><i className="fa-solid fa-minus"></i></button>
                             <span className='m-2 button-qtd'>03</span>
                             <button className='btn btn-outline-danger '><i className="fa-solid fa-plus"></i></button>
-                            <button className='btn btn-danger ms-4'>Adicionar a sacola</button>
+                            <button className='btn btn-danger ms-4'>Adicionar a sacola (R$ 50,00)</button>
                         </div>
                     </div>
                 </div>

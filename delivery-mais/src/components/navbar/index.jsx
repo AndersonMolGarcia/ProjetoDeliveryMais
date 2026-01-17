@@ -20,7 +20,8 @@ function Navbar() {
     }
 
     return (
-        <nav className="navbar navbar-light fixed-top navbar-expand-lg bg-light ps-3 pe-3">
+        <nav className="navbar navbar-light fixed-top navbar-expand-lg bg-light ps-3 pe-3 ">
+        
             <div className="container-fluid">
                 <Link className="navbar-brand" to="/"><img className="mt-1" src={logo} alt="Logotipo" /></Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
