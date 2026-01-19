@@ -1,9 +1,28 @@
 import './style.css';
 import Navbar from '../../components/navbar';
 import Pedido from '../../components/pedido';
+import { useEffect, useState } from 'react';
+import api from '../../services/api';
 
 
 function Pedidos(props) {
+
+    const [pedidos, setPedidos] = useState([]);
+
+    function ListarPedidos() {
+
+        api.get('/v1/pedidos')
+            .then(response => {
+                setPedidos(response.data);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
+    useEffect(() => {
+        ListarPedidos();
+    }, []);
 
     return (
 
@@ -18,11 +37,19 @@ function Pedidos(props) {
 
                 <div className='row mt-5'>
                     {
-                        [1,2,3,4,5].map(pedido => {
+                        pedidos.map(pedido => {
 
                             return <Pedido 
-                                key={pedido} 
-                                url_imagem="https://static-images.ifood.com.br/image/upload/t_high/logosgde/201804191757_2b988c51-d3c3-4a8d-b39d-2f35153a6a0c.jpg"
+                                key={pedido.id_pedido} 
+                                nome={pedido.nome}
+                                url_imagem={pedido.url_logo}
+                                avaliacao={pedido.avaliacao}
+                                qtd_item={pedido.qtd_item}
+                                id_pedido={pedido.id_pedido}
+                                vl_total={pedido.vl_total}
+                                dt_pedido={pedido.dt_pedido}
+                                id_estabelecimento={pedido.id_estabelecimento}
+                                status={pedido.status}
                             />
 
                         })
