@@ -23,3 +23,7 @@
     width: 80px;
     border-radius: 8px;
 }
+
+.pedido-avaliar {
+    cursor: pointer;
+}

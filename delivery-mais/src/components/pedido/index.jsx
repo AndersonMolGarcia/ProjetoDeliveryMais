@@ -1,12 +1,16 @@
 import './style.css';
 import AvaliacaoCheia from '../../assets/star.png';
 import AvaliacaoVazia from '../../assets/star2.png';
+import api from '../../services/api';
+import { useState } from 'react';
 
 
 function Pedido(props) {
 
 
     const dt_ped = new Date(props.dt_pedido);
+    const [avaliar, setAvaliar] = useState(false);
+    const [avaliacao, setAvaliacao] = useState(props.avaliacao);
 
     function Status(st) {
         switch (st) {
@@ -15,6 +19,20 @@ function Pedido(props) {
             case "A": return "Aguardando...";
             default: return "";
         }
+    }
+
+    function Avaliar(avaliacao) {
+
+        api.patch(`/v1/pedidos/avaliacao/${props.id_pedido}`, {
+            avaliacao: avaliacao
+        })
+            .then(response => {
+                setAvaliar(false);
+                setAvaliacao(avaliacao)
+            })
+            .catch(err => {
+
+            })
     }
 
     return (
@@ -38,15 +56,15 @@ function Pedido(props) {
                     <div className=''>
                         {
                             !['A', 'P', 'E'].includes(props.status) ?
-                            <>
-                                <img src={props.avaliacao > 0 ? AvaliacaoCheia : AvaliacaoVazia} alt="Classificação" />
-                                <img src={props.avaliacao > 1 ? AvaliacaoCheia : AvaliacaoVazia} alt="Classificação" />
-                                <img src={props.avaliacao > 2 ? AvaliacaoCheia : AvaliacaoVazia} alt="Classificação" />
-                                <img src={props.avaliacao > 3 ? AvaliacaoCheia : AvaliacaoVazia} alt="Classificação" />
-                                <img src={props.avaliacao > 4 ? AvaliacaoCheia : AvaliacaoVazia} alt="Classificação" />
-                            </>
-                            : null
-                            
+                                <>
+                                    <img src={avaliacao > 0 ? AvaliacaoCheia : AvaliacaoVazia} alt="Classificação" />
+                                    <img src={avaliacao > 1 ? AvaliacaoCheia : AvaliacaoVazia} alt="Classificação" />
+                                    <img src={avaliacao > 2 ? AvaliacaoCheia : AvaliacaoVazia} alt="Classificação" />
+                                    <img src={avaliacao > 3 ? AvaliacaoCheia : AvaliacaoVazia} alt="Classificação" />
+                                    <img src={avaliacao > 4 ? AvaliacaoCheia : AvaliacaoVazia} alt="Classificação" />
+                                </>
+                                : null
+
                         }
                     </div>
 
@@ -57,9 +75,22 @@ function Pedido(props) {
 
             <div className='d-flex align-items-center'>
                 {
-                    !['A', 'P', 'E'].includes(props.status) ?
-                    <button className='btn btn-outline-danger'>Avaliar</button>
-                    : null
+                    !['A', 'P', 'E'].includes(props.status) && !avaliar ?
+                        <button className='btn btn-outline-danger' onClick={(e) => setAvaliar(true)}>Avaliar</button>
+                        : null
+                }
+
+                {
+                    avaliar ?
+                        <div>
+                            <img src={AvaliacaoVazia} alt="Classificação" onClick={(e) => Avaliar(1)} className='pedido-avaliar' />
+                            <img src={AvaliacaoVazia} alt="Classificação" onClick={(e) => Avaliar(2)} className='pedido-avaliar' />
+                            <img src={AvaliacaoVazia} alt="Classificação" onClick={(e) => Avaliar(3)} className='pedido-avaliar' />
+                            <img src={AvaliacaoVazia} alt="Classificação" onClick={(e) => Avaliar(4)} className='pedido-avaliar' />
+                            <img src={AvaliacaoVazia} alt="Classificação" onClick={(e) => Avaliar(5)} className='pedido-avaliar' />
+                        </div>
+
+                        : null
                 }
             </div>
 
