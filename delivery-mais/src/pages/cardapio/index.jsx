@@ -8,6 +8,8 @@ import Produto from '../../components/produto/lista';
 import Footer from '../../components/footer';
 import api from '../../services/api';
 import ProdutoModal from '../../components/produto/modal';
+import FavVazio from '../../assets/favorito.png';
+import FavCheio from '../../assets/favorito2.png';
 
 
 
@@ -27,11 +29,14 @@ function Cardapio(props) {
     const [entrega, setEntrega] = useState("");
     const [minimo, setMinimo] = useState("");
     const [qtd, setQtd] = useState("");
+    const [id_favorito, setIdFavorito] = useState(0);
 
     const [categorias, setCategorias] = useState([]);
     const [produtos, setProdutos] = useState([]);
 
     const [isProdutoOpen, setIsProdutoOpen] = useState(false);
+
+    const [favorito, setFavorito] = useState(true);
 
     function ListarEstabelecimentos() {
         api.get(`v1/estabelecimentos/${id}`)
@@ -47,6 +52,8 @@ function Cardapio(props) {
                 setEntrega(response.data[0].vl_taxa_entrega)
                 setMinimo(response.data[0].vl_min_pedido)
                 setQtd(response.data[0].qtd_avaliacao)
+                setFavorito(response.data[0].id_favorito > 0)
+                setIdFavorito(response.data[0].id_favorito)
             })
             .catch(err => {
                 console.error(err);
@@ -87,6 +94,35 @@ function Cardapio(props) {
         setIsProdutoOpen(false);
     }
 
+    function Favoritar() {
+        api.post('/v1/estabelecimentos/favoritos', {
+            id_estabelecimento: id
+           
+        })
+        .then(response => {
+            setFavorito(true)   ;
+            setIdFavorito(response.data.id_favorito);
+        })
+        .catch(err => {
+            console.error(err);
+        })
+    }
+
+    function RemoverFavorito() {
+
+        api.delete(`/v1/estabelecimentos/favoritos/${id_favorito}`)
+            .then(response => {
+                setFavorito(false);   
+                       
+            })
+            .catch(err => {
+                console.error(err);
+            })
+    };
+
+
+    
+
 
 
     return (
@@ -106,8 +142,25 @@ function Cardapio(props) {
                 </div>
 
                 <div className='col-12 mt-4'>
-                    <h2>{nome}</h2>
-                    <span className='d-block'>{endereco} {complemento.length > 0 ? ' - ' + complemento : null} - {bairro} - {cidade} - {uf}</span>
+
+                    <div className='d-flex justify-content-between align-items-center '>
+                        <h2>{nome}</h2>
+
+                        <div className='favorito'>
+                            {
+                                favorito ? 
+                                    <img src={FavCheio} alt="Remover Favorito" onClick={RemoverFavorito} />  
+                                    : <img src={FavVazio} alt="Favoritar" onClick={Favoritar} /> 
+                            }       
+                        </div>
+
+                    </div>
+
+                    <div>
+                        <span className='d-block'>{endereco} {complemento.length > 0 ? ' - ' + complemento : null} - {bairro} - {cidade} - {uf}</span>
+                    </div>
+
+                    
                     <div className='classificacao'>
                         <img src={Star} alt="Avaliação" />
                         <span className='ms-1'> {avaliacao}</span>

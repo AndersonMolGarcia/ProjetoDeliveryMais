@@ -3,7 +3,10 @@ import Estabelecimento from '../../components/estabelecimento';
 import Navbar from '../../components/navbar';
 
 
+
 function Favoritos(props) {
+
+
 
     return (
 
@@ -23,7 +26,7 @@ function Favoritos(props) {
                                 key={estabelecimento}
                                 url_imagem="https://static-images.ifood.com.br/image/upload/t_high/logosgde/201804191757_2b988c51-d3c3-4a8d-b39d-2f35153a6a0c.jpg"
                                 nome="MacDonald's"
-                                avaliacao="4.5"
+                                avaliacao={4}
                                 categoria="Lanches"
                                 btnRemoverFavorito={true}
                             />
