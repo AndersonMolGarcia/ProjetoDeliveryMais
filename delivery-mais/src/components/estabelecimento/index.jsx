@@ -17,13 +17,19 @@ function Estabelecimento(props) {
                         <span>{props.avaliacao.toFixed(1)} - {props.categoria}</span>
                     </div>
 
-                    {
-                        props.btnRemoverFavorito ? <button className='btn btn-sm btn-outline-danger mt-2'>Remover</button> : null
-                    }
-
                 </div>
             </div>
         </Link>
+        {
+            props.btnRemoverFavorito ?
+                <button
+                    onClick={(e) => props.onClickRemoverFavorito(props.id_favorito)}
+                    className='btn btn-sm btn-outline-danger mt-2'
+                >
+                    Remover
+                </button>
+                : null
+        }
 
     </div>
 }

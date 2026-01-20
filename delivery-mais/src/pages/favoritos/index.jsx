@@ -1,10 +1,32 @@
+import { useEffect, useState } from 'react';
 import './style.css';
 import Estabelecimento from '../../components/estabelecimento';
 import Navbar from '../../components/navbar';
+import api from '../../services/api.js';
+
 
 
 
 function Favoritos(props) {
+
+
+    const [favoritos, setFavoritos] = useState([]);
+
+    function ListarFavoritos() {
+        api.get('v1/estabelecimentos/favoritos')
+            .then(response => setFavoritos(response.data))
+            .catch(err => console.error(err))
+    };
+
+    function DeleteFavorito(id_favorito) {
+        api.delete(`/v1/estabelecimentos/favoritos/${id_favorito}`)
+            .then(response => ListarFavoritos())
+            .catch(err => console.error(err))
+    }
+
+    useEffect(() => {
+        ListarFavoritos();
+    }, []);
 
 
 
@@ -14,21 +36,24 @@ function Favoritos(props) {
             <Navbar />
 
             <div className='row col-lg-8 offset-2'>
-                
+
                 <div className='row m-2'>
                     <h3>Meus Favoritos</h3>
                 </div>
 
                 <div className='row m-2'>
                     {
-                        [1, 2, 3, 4, 5, 6, 7, 8, 9].map(estabelecimento => {
+                        favoritos.map(estabelecimento => {
                             return <Estabelecimento
-                                key={estabelecimento}
-                                url_imagem="https://static-images.ifood.com.br/image/upload/t_high/logosgde/201804191757_2b988c51-d3c3-4a8d-b39d-2f35153a6a0c.jpg"
-                                nome="MacDonald's"
-                                avaliacao={4}
-                                categoria="Lanches"
+                                key={estabelecimento.id_estabelecimento}
+                                url_imagem={estabelecimento.url_logo}
+                                nome={estabelecimento.nome}
+                                avaliacao={estabelecimento.avaliacao}
+                                categoria={estabelecimento.categoria}
+                                id_estabelecimento={estabelecimento.id_estabelecimento}
+                                id_favorito={estabelecimento.id_favorito}
                                 btnRemoverFavorito={true}
+                                onClickRemoverFavorito={DeleteFavorito}
                             />
                         })
                     }
