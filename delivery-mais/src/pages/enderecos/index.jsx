@@ -1,10 +1,24 @@
 import './style.css';
 import Endereco from "../../components/endereco/lista/index.jsx";
 import Navbar from '../../components/navbar/index.jsx';
+import { useEffect, useState } from 'react';
+import api from '../../services/api.js';    
 
 
 
 function Enderecos(props) {
+
+    const [enderecos, setEnderecos] = useState([]);
+
+    function ListarEnderecos() {
+        api.get(`/v1/usuarios/enderecos`)
+            .then(response => setEnderecos(response.data))
+            .catch(err => console.error(err));
+    }
+
+    useEffect(() => {
+        ListarEnderecos();
+    }, []);
 
     return (
         
@@ -20,8 +34,20 @@ function Enderecos(props) {
 
                 <div className='row mt-5'>
                     {
-                        [1,2,3,4,5].map(endereco => {
-                            return <Endereco key={endereco} />
+                        enderecos.map(endereco => {
+                            return <Endereco 
+                                key={endereco.id_endereco} 
+                                id_endereco={endereco.id_endereco}
+                                endereco={endereco.endereco}
+                                complemento={endereco.complemento}
+                                bairro={endereco.bairro}
+                                cidade={endereco.cidade}
+                                uf={endereco.uf}
+                                cep={endereco.cep}
+                                ind_padrao={endereco.ind_padrao}
+                                cod_cidade={endereco.cod_cidade}
+
+                            />
                         })
                     }
                 </div>
