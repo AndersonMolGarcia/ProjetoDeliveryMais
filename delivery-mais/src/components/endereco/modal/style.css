@@ -1,0 +1,12 @@
+.endereco {
+
+}
+
+.endereco select {
+    width: 100%;
+    border: 0;
+    background-color: #ffffff;
+    height: 30px;
+    cursor: pointer;
+
+}

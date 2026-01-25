@@ -3,12 +3,15 @@ import Endereco from "../../components/endereco/lista/index.jsx";
 import Navbar from '../../components/navbar/index.jsx';
 import { useEffect, useState } from 'react';
 import api from '../../services/api.js';    
+import EnderecoModal from '../../components/endereco/modal/index.jsx';
 
 
 
 function Enderecos(props) {
 
     const [enderecos, setEnderecos] = useState([]);
+
+    const [isEnderecoOpen, setIsEnderecoOpen] = useState(false);
 
     function ListarEnderecos() {
         api.get(`/v1/usuarios/enderecos`)
@@ -20,16 +23,29 @@ function Enderecos(props) {
         ListarEnderecos();
     }, []);
 
+    function openModalEndereco() {
+        setIsEnderecoOpen(true);
+    }
+
+    function closeModalEndereco() {
+        setIsEnderecoOpen(false);
+    }
+
     return (
         
         <div className='container-fluid mt-page '>
             <Navbar />
+            
+            <EnderecoModal 
+                isOpen={isEnderecoOpen}
+                onRequestClose={closeModalEndereco}
+            />
 
             <div className='row col-lg-6 offset-lg-3'>
 
                 <div className='col-12 mt-4 d-flex justify-content-between'>
                      <h2 className='mt-2'>Meus Endereços</h2>
-                     <button className='btn btn-sm btn-outline-danger'>Adicionar Endereço</button>
+                     <button className='btn btn-sm btn-outline-danger' onClick={openModalEndereco}>Adicionar Endereço</button>
                 </div>
 
                 <div className='row mt-5'>
