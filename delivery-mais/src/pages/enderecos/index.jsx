@@ -71,6 +71,16 @@ function Enderecos(props) {
 
     }
 
+    function EnderecoPadrao(id) {
+        api.patch(`/v1/usuarios/enderecos/padrao/${id}`)
+        .then(response => {
+            ListarEnderecos();
+        })
+        .catch(err => {
+            console.error(err);
+        })
+    }
+
     return (
 
         <div className='container-fluid mt-page '>
@@ -105,6 +115,7 @@ function Enderecos(props) {
                                 cod_cidade={endereco.cod_cidade}
                                 onClickEditEndereco={openModalEndereco}
                                 onClickDeleteEndereco={ExcluirEndereco}
+                                onClickEnderecoPadrao={EnderecoPadrao}
 
                             />
                         })
