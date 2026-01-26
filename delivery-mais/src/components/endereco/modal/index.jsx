@@ -22,6 +22,8 @@ function EnderecoModal(props) {
     const [cep, setCep] = useState("");
     const [ind_padrao, setInd_padrao] = useState('');
 
+    const [mensagem, setMensagem] = useState("");
+
 
 
 
@@ -41,23 +43,73 @@ function EnderecoModal(props) {
 
     function SalvarEndereco() {
 
+        setMensagem("");
+        //alert('Id endereco: ' + id_endereco)
+        if (id_endereco > 0) {
+            api.patch(`/v1/usuarios/enderecos/${id_endereco}`, {
+                endereco: endereco,
+                complemento: complemento,
+                bairro: bairro,
+                cidade: cidade,
+                uf: uf,
+                cep: cep,
+                ind_padrao: ind_padrao,
+                cod_cidade: codCidade
+
+            })
+                .then(response => props.onRequestClose())
+                .catch(err => {
+                    const msg = 
+                    err.response?.data?.erro ||
+                    err.response?.data?.message ||
+                    'Ocorreu um erro de requisição';
+
+                    setMensagem(msg);
+                    console.error(msg);
+
+                })
+
+        } else {
+            api.post('/v1/usuarios/enderecos', {
+                endereco: endereco,
+                complemento: complemento,
+                bairro: bairro,
+                cidade: cidade,
+                uf: uf,
+                cep: cep,
+                ind_padrao: ind_padrao,
+                cod_cidade: codCidade
+            })
+                .then(response => props.onRequestClose())
+                .catch(err => {
+
+                    const msg =
+                        err.response?.data?.erro ||
+                        err.response?.data?.message ||
+                        'Ocorreu um erro de requisição';
+
+                    setMensagem(msg);
+                    console.error(msg);
+                });
+        }
+
     }
 
     useEffect(() => {
-
-        setId_Endereco(props.dados_endereco.id_endereco);
-        setEndereco(props.dados_endereco.endereco);
-        setComplemento(props.dados_endereco.complemento);
-        setBairro(props.dados_endereco.bairro);
-        setCidade(props.dados_endereco.cidade);
-        setUf(props.dados_endereco.uf);
-        setCodCidade(props.dados_endereco.cod_cidade);
-        setCep(props.dados_endereco.cep);
+        if (!props.dados_endereco) return;
+        setId_Endereco(props.dados_endereco.id_endereco || "");
+        setEndereco(props.dados_endereco.endereco || "");
+        setComplemento(props.dados_endereco.complemento || "");
+        setBairro(props.dados_endereco.bairro || "");
+        setCidade(props.dados_endereco.cidade || "");
+        setUf(props.dados_endereco.uf || "");
+        setCodCidade(props.dados_endereco.cod_cidade || "");
+        setCep(props.dados_endereco.cep || "");
         setInd_padrao('N');
 
         CarregarComboBoxCidades();
 
-    }, [props.isOpen]); // sempre que IsOpen alterar o valor para true
+    }, [props.dados_endereco]); // sempre que IsOpen alterar o valor para true
 
 
 
@@ -152,6 +204,14 @@ function EnderecoModal(props) {
                     <button onClick={SalvarEndereco} type="button" className='btn btn-lg btn-danger'>Salvar Dados</button>
                 </div>
             </div>
+
+            {
+                mensagem && ( 
+                    <div className='alert alert-danger mt-2 text-center'>
+                        {mensagem}
+                    </div>
+                    
+            )}
 
 
         </div>

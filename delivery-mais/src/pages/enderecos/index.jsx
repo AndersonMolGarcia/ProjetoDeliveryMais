@@ -23,9 +23,7 @@ function Enderecos(props) {
         ListarEnderecos();
     }, []);
 
-    function openModalEndereco(id) {
-
-        alert("ID_ENDERECO: " + id);
+    function openModalEndereco(id) {       
 
         if (id > 0) {
             api.get(`v1/usuarios/enderecos/${id}`)
@@ -44,6 +42,7 @@ function Enderecos(props) {
 
     function closeModalEndereco() {
         setIsEnderecoOpen(false);
+        ListarEnderecos();
     }
 
     return (
