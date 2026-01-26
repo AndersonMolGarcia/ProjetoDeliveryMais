@@ -9,6 +9,7 @@ import Pedidos from './pages/pedidos/index.jsx';
 import Cardapio from './pages/cardapio/index.jsx';
 import Login from "./pages/login/index.jsx";
 import Cadastro from "./pages/cadastro/index.jsx";
+import TrocarEndereco from "./pages/trocar-endereco/index.jsx";
 
 
 function Rotas() {
@@ -26,6 +27,7 @@ function Rotas() {
                 <Route exact path="/cardapio/:id" element={<Cardapio />} />
                 <Route exact path="/login" element={<Login />} />
                 <Route exact path="/cadastro" element={<Cadastro />} />
+                <Route exact path="/trocar-endereco" element={<TrocarEndereco/>} />
             </Routes>
         </BrowserRouter>
 

@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import './style.css';
 import { useState } from "react";
+import { formToJSON } from "axios";
 
 
 function Navbar() {
@@ -43,7 +44,9 @@ function Navbar() {
                 </div>
 
                 <div className="mt-1">
-                    <button className="btn btn-outline-danger me-3"><i className="fa-solid fa-location-dot"></i>Entrega: São Paulo</button>
+                    <Link className="btn btn-outline-danger me-3" to={"/trocar-endereco"}>
+                        <i className="fa-solid fa-location-dot"></i>Entrega: {JSON.parse(localStorage.getItem('sessionCidade'))}
+                    </Link>
                     {
                         // <button className="btn btn-outline-danger me-3"><i class="fa-solid fa-arrow-right-to-bracket"></i> Acessar</button>       
                     }
