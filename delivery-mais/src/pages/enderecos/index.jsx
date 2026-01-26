@@ -10,8 +10,8 @@ import EnderecoModal from '../../components/endereco/modal/index.jsx';
 function Enderecos(props) {
 
     const [enderecos, setEnderecos] = useState([]);
-
     const [isEnderecoOpen, setIsEnderecoOpen] = useState(false);
+    const [dadosEndereco, setDadosEndereco] = useState([]);
 
     function ListarEnderecos() {
         api.get(`/v1/usuarios/enderecos`)
@@ -23,8 +23,23 @@ function Enderecos(props) {
         ListarEnderecos();
     }, []);
 
-    function openModalEndereco() {
-        setIsEnderecoOpen(true);
+    function openModalEndereco(id) {
+
+        alert("ID_ENDERECO: " + id);
+
+        if (id > 0) {
+            api.get(`v1/usuarios/enderecos/${id}`)
+                .then(response => {
+                    setDadosEndereco(response.data[0]);
+                    setIsEnderecoOpen(true);
+                })
+                .catch(err => console.error(err));
+        }else {
+            setDadosEndereco([]);
+            setIsEnderecoOpen(true);
+        }
+
+        
     }
 
     function closeModalEndereco() {
@@ -39,13 +54,14 @@ function Enderecos(props) {
             <EnderecoModal 
                 isOpen={isEnderecoOpen}
                 onRequestClose={closeModalEndereco}
+                dados_endereco={dadosEndereco}
             />
 
             <div className='row col-lg-6 offset-lg-3'>
 
                 <div className='col-12 mt-4 d-flex justify-content-between'>
                      <h2 className='mt-2'>Meus Endereços</h2>
-                     <button className='btn btn-sm btn-outline-danger' onClick={openModalEndereco}>Adicionar Endereço</button>
+                     <button className='btn btn-sm btn-outline-danger' onClick={(e) => openModalEndereco(0)}>Adicionar Endereço</button>
                 </div>
 
                 <div className='row mt-5'>
@@ -62,6 +78,7 @@ function Enderecos(props) {
                                 cep={endereco.cep}
                                 ind_padrao={endereco.ind_padrao}
                                 cod_cidade={endereco.cod_cidade}
+                                onClickEditEndereco={openModalEndereco}
 
                             />
                         })

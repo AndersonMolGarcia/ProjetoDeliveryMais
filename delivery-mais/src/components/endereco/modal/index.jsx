@@ -5,8 +5,11 @@ import { useEffect, useState } from 'react';
 import api from '../../../services/api';
 
 
+Modal.setAppElement("#root");
+
 function EnderecoModal(props) {
 
+    const [id_endereco, setId_Endereco] = useState("");
     const [endereco, setEndereco] = useState("");
     const [complemento, setComplemento] = useState("");
     const [bairro, setBairro] = useState("");
@@ -17,6 +20,9 @@ function EnderecoModal(props) {
     const [uf, setUf] = useState("");
     const [codCidade, setCodCidade] = useState("");
     const [cep, setCep] = useState("");
+    const [ind_padrao, setInd_padrao] = useState('');
+
+
 
 
 
@@ -38,8 +44,20 @@ function EnderecoModal(props) {
     }
 
     useEffect(() => {
+
+        setId_Endereco(props.dados_endereco.id_endereco);
+        setEndereco(props.dados_endereco.endereco);
+        setComplemento(props.dados_endereco.complemento);
+        setBairro(props.dados_endereco.bairro);
+        setCidade(props.dados_endereco.cidade);
+        setUf(props.dados_endereco.uf);
+        setCodCidade(props.dados_endereco.cod_cidade);
+        setCep(props.dados_endereco.cep);
+        setInd_padrao('N');
+
         CarregarComboBoxCidades();
-    }, []);
+
+    }, [props.isOpen]); // sempre que IsOpen alterar o valor para true
 
 
 
