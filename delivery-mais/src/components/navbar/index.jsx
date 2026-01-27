@@ -7,12 +7,12 @@ import { formToJSON } from "axios";
 
 function Navbar() {
 
-    
+
     const navigate = useNavigate();
     const [busca, setBusca] = useState("");
-    
+
     function Buscar() {
-        navigate(`/busca?q=${busca}`);        
+        navigate(`/busca?q=${busca}`);
     }
 
     function openSidebar() {
@@ -20,9 +20,20 @@ function Navbar() {
         window.dispatchEvent(event);
     }
 
+    function Logout() {
+        localStorage.removeItem('sessionToken');
+        localStorage.removeItem('sessionEmail');
+        localStorage.removeItem('sessionCodCidade');
+        localStorage.removeItem('sessionId');
+        localStorage.removeItem('sessionCidade');
+        localStorage.removeItem('sessionUf');
+
+        navigate('/login');
+    }
+
     return (
         <nav className="navbar navbar-light fixed-top navbar-expand-lg bg-light ps-3 pe-3 ">
-        
+
             <div className="container-fluid">
                 <Link className="navbar-brand" to="/"><img className="mt-1" src={logo} alt="Logotipo" /></Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,12 +42,12 @@ function Navbar() {
 
                 <div className="ms-auto me-auto mt-1">
                     <div className="input-group">
-                        <input 
-                            type="text" 
-                            className="form-control" 
-                            placeholder="Procurar um restaurante..." 
-                            aria-label="Recipient’s username" 
-                            aria-describedby="button-addon2" 
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Procurar um restaurante..."
+                            aria-label="Recipient’s username"
+                            aria-describedby="button-addon2"
                             onChange={(e) => setBusca(e.target.value)}
                         />
                         <button onClick={Buscar} className="btn btn-danger" type="button" id="button-addon2"><i className="fas fa-search"></i>Buscar</button>
@@ -58,17 +69,17 @@ function Navbar() {
                             <li><Link to="/pedidos" className="dropdown-item">Pedidos</Link></li>
                             <li><Link to="/favoritos" className="dropdown-item">Favoritos</Link></li>
                             <li><Link to="/perfil" className="dropdown-item">Perfil</Link></li>
-                            <li><Link to="/enderecos" className="dropdown-item">Meus Endereços</Link></li>                           
+                            <li><Link to="/enderecos" className="dropdown-item">Meus Endereços</Link></li>
                             <li><hr className="dropdown-divider" /></li>
-                            <li><Link to="/" className="dropdown-item">Sair</Link></li>
-                        </ul> 
+                            <li><a href="#" onClick={Logout} className="dropdown-item">Sair</a></li>
+                        </ul>
                     </div>
 
                     <button onClick={openSidebar} className="btn btn-outline-danger me-3"><i className="fas fa-shopping-bag"></i>Sacola</button>
 
                 </div>
 
-                
+
 
 
 
