@@ -10,6 +10,7 @@ import Cardapio from './pages/cardapio/index.jsx';
 import Login from "./pages/login/index.jsx";
 import Cadastro from "./pages/cadastro/index.jsx";
 import TrocarEndereco from "./pages/trocar-endereco/index.jsx";
+import PrivateRoute from "./components/private-route/index.jsx";
 
 
 function Rotas() {
@@ -18,16 +19,16 @@ function Rotas() {
 
         <BrowserRouter>
             <Routes>
-                <Route exact path="/" element={<Home />} />
-                <Route exact path="/busca" element={<Busca />} />
-                <Route exact path="/favoritos" element={<Favoritos />} />
-                <Route exact path="/perfil" element={<Perfil />} />
-                <Route exact path="/enderecos" element={<Enderecos />} />
-                <Route exact path="/pedidos" element={<Pedidos />} />
-                <Route exact path="/cardapio/:id" element={<Cardapio />} />
+                <Route exact path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
+                <Route exact path="/busca" element={<PrivateRoute><Busca /></PrivateRoute>} />
+                <Route exact path="/favoritos" element={<PrivateRoute><Favoritos /></PrivateRoute>} />
+                <Route exact path="/perfil" element={<PrivateRoute><Perfil /></PrivateRoute>} />
+                <Route exact path="/enderecos" element={<PrivateRoute><Enderecos /></PrivateRoute>} />
+                <Route exact path="/pedidos" element={<PrivateRoute><Pedidos /></PrivateRoute>} />
+                <Route exact path="/cardapio/:id" element={<PrivateRoute><Cardapio /></PrivateRoute>} />
                 <Route exact path="/login" element={<Login />} />
                 <Route exact path="/cadastro" element={<Cadastro />} />
-                <Route exact path="/trocar-endereco" element={<TrocarEndereco/>} />
+                <Route exact path="/trocar-endereco" element={<PrivateRoute><TrocarEndereco/></PrivateRoute>} />
             </Routes>
         </BrowserRouter>
 

@@ -1,6 +1,7 @@
 import './style.css';
 
-function Footer(){
+
+function Footer() {
 
     const ano = new Date().getFullYear();
 
