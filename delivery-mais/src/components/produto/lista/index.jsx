@@ -2,53 +2,52 @@
 import './style.css';
 
 function Produto(props) {
-    return <div className="col-sm-6 mb-3 p-4 produto-lista">
-        <a onClick={props.onClickProduto}>
+    return <div onClick={() => props.onClickProduto(props.id_produto)} className="col-sm-6 mb-3 p-4 produto-lista">
 
-            <div className='row p-3 ps-0 border-bottom'>
+        <div className='row p-3 ps-0 border-bottom'>
 
-                <div className='col-3'>
-                    <img
-                        className="img-fluid rounded"
-                        src={props.url_foto}
-                        alt="Produto"
-                    />
-                </div>
+            <div className='col-3'>
+                <img
+                    className="img-fluid rounded"
+                    src={props.url_foto}
+                    alt="Produto"
+                />
+            </div>
 
-                <div className='col-9'>
-                    <small className='d-block'><b>{props.nome}</b></small>
-                    <small className='d-block'>{props.descricao}</small>
+            <div className='col-9'>
+                <small className='d-block'><b>{props.nome}</b></small>
+                <small className='d-block'>{props.descricao}</small>
 
-                    {
-                        props.vl_promocao > 0 ?
-                            <>
+                {
+                    props.vl_promocao > 0 ?
+                        <>
 
-                                <span className='badge bg-success d-inline-block mt-3'>
-                                    {
-                                        new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(props.vl_promocao)
-                                    }
-                                </span>
+                            <span className='badge bg-success d-inline-block mt-3'>
+                                {
+                                    new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(props.vl_promocao)
+                                }
+                            </span>
 
-                                <small className='d-inline-block ms-4 mt-3 preco-antigo'>
-                                    {
-                                        new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(props.vl_produto)
-                                    }
-                                </small>
-                            </>
-
-                            :
-                            <small className='d-inline-block mt-3 text-success'>
+                            <small className='d-inline-block ms-4 mt-3 preco-antigo'>
                                 {
                                     new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(props.vl_produto)
                                 }
                             </small>
-                    }
+                        </>
 
-                </div>
+                        :
+                        <small className='d-inline-block mt-3 text-success'>
+                            {
+                                new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(props.vl_produto)
+                            }
+                        </small>
+                }
 
             </div>
 
-        </a>
+        </div>
+
+
     </div>
 }
 

@@ -38,6 +38,9 @@ function Cardapio(props) {
 
     const [favorito, setFavorito] = useState(true);
 
+    const [id_produto, setIdProduto] = useState(0);
+
+
     function ListarEstabelecimentos() {
         api.get(`v1/estabelecimentos/${id}`)
             .then(response => {
@@ -86,7 +89,8 @@ function Cardapio(props) {
 
 
 
-    function OpenModalProduto() {
+    function OpenModalProduto(id_produto) {
+        setIdProduto(id_produto);
         setIsProdutoOpen(true);
     };
 
@@ -131,7 +135,8 @@ function Cardapio(props) {
             <Navbar />
 
             <ProdutoModal 
-                isOpen={isProdutoOpen}   
+                isOpen={isProdutoOpen}  
+                id_produto={id_produto} 
                 onRequestClose={CloseModalProduto}
             />
 
@@ -211,6 +216,7 @@ function Cardapio(props) {
                                             vl_produto={produto.vl_produto}
                                             vl_promocao={produto.vl_promocao}
                                             url_foto={produto.url_foto}
+                                            id_produto={produto.id_produto}
                                             onClickProduto={OpenModalProduto}
                                         />
                                         : null

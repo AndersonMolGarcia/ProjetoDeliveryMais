@@ -1,5 +1,5 @@
-.produto-lista a{
-    text-decoration: none;
+.produto-lista {
+     text-decoration: none;
     color: rgb(51, 51, 51);
     cursor: pointer;
 }
