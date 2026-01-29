@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Navbar from '../../components/navbar';
 import Footer from '../../components/footer';
 import Estabelecimento from "../../components/estabelecimento";
@@ -6,9 +6,9 @@ import Categoria from '../../components/categoria';
 import Banner from '../../components/banner';
 import api from '../../services/api';
 
+
 function Home(){
 
-   
     const [categorias, setCategorias] = useState([]);
     const [banners, setBanners] = useState([]);
     const [grupos, setGrupos] = useState([]);
@@ -97,6 +97,7 @@ function Home(){
               
 
             <div className="row justify-content-center text-center">
+                
                 {
                     categorias.map(categoria => {
                         return <Categoria 

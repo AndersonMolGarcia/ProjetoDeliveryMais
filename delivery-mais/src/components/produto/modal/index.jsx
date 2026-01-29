@@ -33,8 +33,8 @@ function ProdutoModal(props) {
     }
 
     function ClickMenos() {
-        if (qtd <= 1) return;
-        setQtd(qtd - 1)       
+        //if (qtd <= 1) return; setQtd(qtd - 1);      
+        setQtd(prev => (prev > 1 ? prev -1 : prev)); // mais seguro
     };
 
     function ClickMais() {
