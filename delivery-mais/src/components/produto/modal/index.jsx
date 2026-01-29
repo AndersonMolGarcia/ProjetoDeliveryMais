@@ -15,6 +15,8 @@ function ProdutoModal(props) {
     const [vl_promocao, setVlPromocao] = useState("");
     const [url_foto, setUrlFoto] = useState("");
 
+    const [qtd, setQtd] = useState(1);
+
     function ListarDadosProduto() {
         api.get(`v1/produtos/${props.id_produto}`)
             .then(response => {
@@ -29,6 +31,15 @@ function ProdutoModal(props) {
             })
             .catch(err => console.error(err));
     }
+
+    function ClickMenos() {
+        if (qtd <= 1) return;
+        setQtd(qtd - 1)       
+    };
+
+    function ClickMais() {
+        setQtd(qtd + 1)       
+    };
 
     useEffect(() => {
 
@@ -105,9 +116,11 @@ function ProdutoModal(props) {
                     <div className='col-12 mt-3 d-flex justify-content-end'>
 
                         <div className='d-flex align-items-center justify-content-center flex-wrap flex-md-nowrap gap-2'>
-                            <button className='btn btn-outline-danger'><i className="fa-solid fa-minus"></i></button>
-                            <span className='m-2 button-qtd'>03</span>
-                            <button className='btn btn-outline-danger '><i className="fa-solid fa-plus"></i></button>
+                            <button onClick={ClickMenos} className='btn btn-outline-danger'><i className="fa-solid fa-minus"></i></button>
+                            <span className='m-2 button-qtd'>
+                                { qtd.toLocaleString('pt-BR', {minimumIntegerDigits: 2}) }
+                            </span>
+                            <button onClick={ClickMais} className='btn btn-outline-danger '><i className="fa-solid fa-plus"></i></button>
                             <button className='btn btn-danger ms-4'>Adicionar a sacola (R$ 50,00)</button>
                         </div>
                     </div>
