@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import './style.css';
 import Navbar from '../../components/navbar';
@@ -10,12 +10,16 @@ import api from '../../services/api';
 import ProdutoModal from '../../components/produto/modal';
 import FavVazio from '../../assets/favorito.png';
 import FavCheio from '../../assets/favorito2.png';
+import { CartContext } from '../../contexts/cart';
+
+
 
 
 
 
 function Cardapio(props) {
 
+    const {cart, setEntregaCart, setIdEstabelecimentoCart, idEstabelecimentoCart} = useContext(CartContext);
     
     const {id} = useParams();
     const [nome, setNome] = useState("");
@@ -30,6 +34,7 @@ function Cardapio(props) {
     const [minimo, setMinimo] = useState("");
     const [qtd, setQtd] = useState("");
     const [id_favorito, setIdFavorito] = useState(0);
+    const [id_produto, setIdProduto] = useState(0);
 
     const [categorias, setCategorias] = useState([]);
     const [produtos, setProdutos] = useState([]);
@@ -38,7 +43,7 @@ function Cardapio(props) {
 
     const [favorito, setFavorito] = useState(true);
 
-    const [id_produto, setIdProduto] = useState(0);
+    
 
 
     function ListarEstabelecimentos() {
@@ -90,7 +95,16 @@ function Cardapio(props) {
 
 
     function OpenModalProduto(id_produto) {
+
+        // Valida se pode abrir o produto (não pode ter iniciado compra de outro estabelecimento)
+        if (cart.length > 0 && idEstabelecimentoCart != id && idEstabelecimentoCart > 0) { // (id = id_estabelecimento)
+            alert('Já existem produtos de outro estabelecimento na sacola.');
+            return;
+        }
+
         setIdProduto(id_produto);
+        setEntregaCart(entrega);
+        setIdEstabelecimentoCart(id);
         setIsProdutoOpen(true);
     };
 

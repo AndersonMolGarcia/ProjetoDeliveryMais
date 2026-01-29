@@ -8,8 +8,8 @@ import { CartContext, CartProvider } from '../../contexts/cart';
 
 function Sidebar(props) {
 
-    const[show, setShow] = useState(false);
-    const {cart, setCart} = useContext(CartContext);
+    const [show, setShow] = useState(false);
+    const { cart, setCart, subTotalCart, descontoCart, entregaCart, totalCart } = useContext(CartContext);
 
     useEffect(() => {
         window.addEventListener('openSidebar', () => {
@@ -39,7 +39,7 @@ function Sidebar(props) {
                 <div className='row produtos'>
                     {
                         cart.map((prod) => {
-                            return <Produto 
+                            return <Produto
                                 key={prod.id_carrinho}
                                 nome={prod.nome}
                                 valor_total={prod.vl_unit * prod.qtd}
@@ -55,7 +55,11 @@ function Sidebar(props) {
                 <div className='row align-itens-end footer'>
                     <div className='col-12 d-flex justify-content-between align-itens-center'>
                         <span>Subtotal</span>
-                        <span>R$ 45,00</span>
+                        <span>
+                            {
+                                new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(subTotalCart)
+                            }
+                        </span>
                     </div>
 
                     <div className='col-12 d-flex justify-content-between align-itens-center mt-2'>
@@ -71,19 +75,32 @@ function Sidebar(props) {
                         </div>
 
                         <div className='input-group justify-content-end'>
-                            <span className='d-inline-block text-success'>- R$ 0,00</span>
+                            <span className='d-inline-block text-success'>
+                                -
+                                {
+                                    new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(descontoCart)
+                                }
+                            </span>
                         </div>
 
                     </div>
 
                     <div className='col-12 d-flex justify-content-between align-itens-center mt-2'>
                         <span>Taxa de Entrega</span>
-                        <span>R$ 5,00</span>
+                        <span>
+                            {
+                                new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(entregaCart)
+                            }
+                        </span>
                     </div>
 
                     <div className='col-12 d-flex justify-content-between align-itens-center mt-3'>
                         <b>Total</b>
-                        <h3>R$ 150,00</h3>
+                        <h3>
+                            {
+                                new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalCart)
+                            }
+                        </h3>
                     </div>
 
                     <button className='btn btn-danger rounded-0 align-itens-center btn-pedido'>Finalizar Pedido</button>
