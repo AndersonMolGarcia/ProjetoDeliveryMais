@@ -46,6 +46,7 @@ function Sidebar(props) {
                                 qtd={prod.qtd}
                                 valor_unit={prod.vl_unit}
                                 id_carrinho={prod.id_carrinho}
+                                url_foto={prod.url_foto}
                                 onClickRemover={ClickRemover}
                             />
                         })

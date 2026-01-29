@@ -3,10 +3,14 @@ import './style.css';
 import closeIcon from '../../../assets/close.png';
 import ProdutoItemRadio from '../produto-item-radio';
 import ProdutoItemCheckbox from '../produto-item-checkbox';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import api from '../../../services/api.js';
+import { CartContext } from '../../../contexts/cart.jsx';
+import {v4 as uuidv4} from 'uuid';
 
 function ProdutoModal(props) {
+
+    const {cart, AddItemCart} = useContext(CartContext);
 
     const [id_produto, setIdProduto] = useState("");
     const [nome, setNome] = useState("");
@@ -26,6 +30,7 @@ function ProdutoModal(props) {
                 setVlProduto(response.data[0].vl_produto)
                 setVlPromocao(response.data[0].vl_promocao)
                 setUrlFoto(response.data[0].url_foto)
+                setQtd(1);
 
                 console.log(props.id_produto)
             })
@@ -34,11 +39,11 @@ function ProdutoModal(props) {
 
     function ClickMenos() {
         //if (qtd <= 1) return; setQtd(qtd - 1);      
-        setQtd(prev => (prev > 1 ? prev -1 : prev)); // mais seguro
+        setQtd(prev => (prev > 1 ? prev - 1 : prev)); // mais seguro
     };
 
     function ClickMais() {
-        setQtd(qtd + 1)       
+        setQtd(qtd + 1)
     };
 
     useEffect(() => {
@@ -47,6 +52,23 @@ function ProdutoModal(props) {
         ListarDadosProduto();
 
     }, [props.id_produto]);
+
+    function AddItem() {
+        const item = {
+            id_carrinho: uuidv4(),
+            id_produto: id_produto,
+            nome: nome,
+            qtd: qtd,
+            vl_unit: vl_promocao > 0 ? vl_promocao : vl_produto,
+            url_foto: url_foto,
+            detalhes: [
+
+            ]
+        };
+       // console.log(item);
+        AddItemCart(item);
+        props.onRequestClose();
+    }
 
 
     return (
@@ -118,10 +140,15 @@ function ProdutoModal(props) {
                         <div className='d-flex align-items-center justify-content-center flex-wrap flex-md-nowrap gap-2'>
                             <button onClick={ClickMenos} className='btn btn-outline-danger'><i className="fa-solid fa-minus"></i></button>
                             <span className='m-2 button-qtd'>
-                                { qtd.toLocaleString('pt-BR', {minimumIntegerDigits: 2}) }
+                                {qtd.toLocaleString('pt-BR', { minimumIntegerDigits: 2 })}
                             </span>
                             <button onClick={ClickMais} className='btn btn-outline-danger '><i className="fa-solid fa-plus"></i></button>
-                            <button className='btn btn-danger ms-4'>Adicionar a sacola (R$ 50,00)</button>
+                            <button onClick={AddItem} className='btn btn-danger ms-4'>                                
+                                Adicionar a sacola: ({                                    
+                                    new Intl.NumberFormat('pt-br', 
+                                        {style:'currency', currency:'BRL'}).format(qtd * (vl_promocao > 0 ? vl_promocao : vl_produto) )
+                                })
+                            </button>
                         </div>
                     </div>
                 </div>

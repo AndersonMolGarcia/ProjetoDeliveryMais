@@ -10,7 +10,7 @@ function Produto(props) {
                 <div className="col-3">
                     <img 
                         className="img-fluid rounded" 
-                        src="https://static-images.ifood.com.br/image/upload/t_medium/pratos/cd1b9efa-c98d-4d0f-8c1a-0595beac2594/202108111938_3QAO_i.jpg" 
+                        src={props.url_foto}
                         alt="" />
                 </div>
 
