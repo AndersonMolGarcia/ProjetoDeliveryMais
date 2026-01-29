@@ -1,19 +1,29 @@
 import { Dock } from 'react-dock';
 import './style.css';
 import Produto from '../produto/sacola';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { CartContext, CartProvider } from '../../contexts/cart';
 
 
 
 function Sidebar(props) {
 
     const[show, setShow] = useState(false);
+    const {cart, setCart} = useContext(CartContext);
 
     useEffect(() => {
         window.addEventListener('openSidebar', () => {
             setShow(true);
         });
     }, []);
+
+
+    function ClickRemover(id_car) {
+        const novoCart = cart.filter((item, index, array) => {
+            return item.id_carrinho != id_car;
+        })
+        setCart(novoCart);
+    }
 
     return (
         <Dock
@@ -28,13 +38,15 @@ function Sidebar(props) {
 
                 <div className='row produtos'>
                     {
-                        [1, 2, 3, 4, 5].map((produto) => {
+                        cart.map((prod) => {
                             return <Produto 
-                                key={produto}
-                                nome="Pizza 4 Queijos"
-                                valor_total="R$ 80,00"
-                                qtd="2"
-                                valor_unit="R$ 40,00"
+                                key={prod.id_carrinho}
+                                nome={prod.nome}
+                                valor_total={prod.vl_unit * prod.qtd}
+                                qtd={prod.qtd}
+                                valor_unit={prod.vl_unit}
+                                id_carrinho={prod.id_carrinho}
+                                onClickRemover={ClickRemover}
                             />
                         })
                     }

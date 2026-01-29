@@ -17,12 +17,24 @@ function Produto(props) {
                 <div className="col-9">
                     <div className="d-flex justify-content-between align-items-center">
                         <small> <b> {props.nome} </b> </small>
-                        <small> <b> {props.valor_total} </b ></small>                        
+                        <small> 
+                            <b>
+                                {
+                                    new Intl.NumberFormat('pt-BR', {style: 'currency', currency:'BRL'}).format(props.valor_total)
+                                }
+                            </b>
+                        </small>                        
                     </div>
 
-                    <small className="d-block"> {props.qtd} x {props.valor_unit}</small>
+                    <small className="d-block">
+                        {props.qtd.toLocaleString('pt-BR', {minimumIntegerDigits:2})} 
+                        <span className="ms-2 me-2">x</span>
+                        {
+                            new Intl.NumberFormat('pt-BR', {style:'currency', currency:'BRL'}).format(props.valor_unit)
+                        }
+                    </small>
 
-                    <button className="btn btn-sm btn-outline-danger mt-2">Remover</button>
+                    <button onClick={(e) => props.onClickRemover(props.id_carrinho)} className="btn btn-sm btn-outline-danger mt-2">Remover</button>
 
                 </div>
             </div>
