@@ -8,7 +8,7 @@ const CartContext = createContext({});
 
 
 
-function CartProvider(props) {    
+function CartProvider(props) {
 
     const [cart, setCart] = useState([]);
     const [subTotalCart, setSubTotalCart] = useState(0);
@@ -22,6 +22,13 @@ function CartProvider(props) {
         setCart([...cart, item]);
     }
 
+    function RemoveItemCart(id_car) {
+        const novoCart = cart.filter((item, index, array) => {
+            return item.id_carrinho != id_car;
+        })
+        setCart(novoCart);
+    }
+
 
     useEffect(() => {
         let soma = cart.reduce((a, b) => a + (b.vl_unit * b.qtd), 0);
@@ -30,7 +37,7 @@ function CartProvider(props) {
         setTotalCart((subTotalCart - descontoCart) + entregaCart);
         setTotalCart((subTotalCart - descontoCart) + entregaCart);
 
-        
+
 
     }, [cart]);
 
@@ -38,7 +45,7 @@ function CartProvider(props) {
         setTotalCart((subTotalCart - descontoCart) + entregaCart);
     }, [subTotalCart, descontoCart, entregaCart]);
 
-    
+
 
 
     return (
@@ -51,7 +58,8 @@ function CartProvider(props) {
                 idCupomCart, setIdCupomCart,
                 totalCart, setTotalCart,
                 idEstabelecimentoCart, setIdEstabelecimentoCart,
-                AddItemCart
+                AddItemCart,
+                RemoveItemCart
             }}
         >
             {props.children}

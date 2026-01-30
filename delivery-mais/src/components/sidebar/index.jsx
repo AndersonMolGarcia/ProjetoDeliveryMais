@@ -10,7 +10,7 @@ import Sacola from '../../assets/bag.png';
 function Sidebar(props) {
 
     const [show, setShow] = useState(false);
-    const { cart, setCart, subTotalCart, descontoCart, entregaCart, totalCart } = useContext(CartContext);
+    const { cart, subTotalCart, descontoCart, entregaCart, totalCart, RemoveItemCart } = useContext(CartContext);
 
     useEffect(() => {
         window.addEventListener('openSidebar', () => {
@@ -19,12 +19,7 @@ function Sidebar(props) {
     }, []);
 
 
-    function ClickRemover(id_car) {
-        const novoCart = cart.filter((item, index, array) => {
-            return item.id_carrinho != id_car;
-        })
-        setCart(novoCart);
-    }
+    
 
     return (
         <Dock
@@ -55,7 +50,7 @@ function Sidebar(props) {
                                     valor_unit={prod.vl_unit}
                                     id_carrinho={prod.id_carrinho}
                                     url_foto={prod.url_foto}
-                                    onClickRemover={ClickRemover}
+                                    onClickRemover={RemoveItemCart}
                                 />
                             })
                         }
