@@ -82,6 +82,14 @@ function CartProvider(props) {
         setTotalCart((subTotalCart - descontoCart) + entregaCart);
     }, [subTotalCart, descontoCart, entregaCart]);
 
+    useEffect(() => {
+        if (cupomCart.length > 0) {
+            ValidarCupom();
+        }
+    }, [subTotalCart]);
+
+    useEffect(() => {setMsgCart('')}, [cupomCart]);
+
 
 
 
