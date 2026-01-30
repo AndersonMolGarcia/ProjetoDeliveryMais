@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from "react";
+import api from "../services/api";
 
 
 
@@ -15,8 +16,11 @@ function CartProvider(props) {
     const [descontoCart, setDescontoCart] = useState(0);
     const [entregaCart, setEntregaCart] = useState(0);
     const [idCupomCart, setIdCupomCart] = useState(0);
+    const [cupomCart, setCupomCart] = useState("");
+    const [msgCart, setMsgCart] = useState("");
     const [totalCart, setTotalCart] = useState(0);
     const [idEstabelecimentoCart, setIdEstabelecimentoCart] = useState(0);
+
 
     function AddItemCart(item) {
         setCart([...cart, item]);
@@ -27,6 +31,39 @@ function CartProvider(props) {
             return item.id_carrinho != id_car;
         })
         setCart(novoCart);
+    }
+
+    function ValidarCupom() {
+        setMsgCart("");
+
+        api.get(`v1/cupons/validacao`, {
+            params: {
+                cod_cupom: cupomCart,
+                vl_pedido: Math.trunc(subTotalCart * 100),
+                id_estabelecimento: idEstabelecimentoCart
+            }
+        })
+            .then(response => {
+                if (response.data) {
+                    let porc_cupom = response.data.porc_cupom;
+                    let vl_cupom = response.data.vl_cupom;
+
+                    setIdCupomCart(response.data.id_cupom);
+                    setDescontoCart(vl_cupom + (subTotalCart * porc_cupom / 100));
+                } else {
+                    setIdCupomCart(0);
+                    setDescontoCart(0);
+                    setMsgCart("Cupom inválido");
+
+                }
+            })
+            .catch(err => {
+                setIdCupomCart(0);
+                setDescontoCart(0);
+                setMsgCart("Cupom inválido");
+                console.error(err);
+            })
+
     }
 
 
@@ -59,7 +96,10 @@ function CartProvider(props) {
                 totalCart, setTotalCart,
                 idEstabelecimentoCart, setIdEstabelecimentoCart,
                 AddItemCart,
-                RemoveItemCart
+                RemoveItemCart,
+                ValidarCupom,
+                cupomCart, setCupomCart,
+                msgCart, setMsgCart
             }}
         >
             {props.children}
