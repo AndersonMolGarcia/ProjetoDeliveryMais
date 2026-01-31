@@ -22,8 +22,27 @@ function CartProvider(props) {
     const [idEstabelecimentoCart, setIdEstabelecimentoCart] = useState(0);
 
 
+
+
+    function SalvarCart(produtos) {
+
+        if (produtos.length > 0) {
+            localStorage.setItem('sessionCart', JSON.stringify({
+                cupom: cupomCart,
+                id_cupom: idCupomCart,
+                id_estabelecimento: idEstabelecimentoCart,
+                entrega: entregaCart,
+                itens: produtos
+            }));
+        }else {
+            localStorage.removeItem('sessionCart');
+        }
+    }
+
+
     function AddItemCart(item) {
         setCart([...cart, item]);
+        SalvarCart([...cart, item]); // salvando no localStorage
     }
 
     function RemoveItemCart(id_car) {
@@ -31,10 +50,12 @@ function CartProvider(props) {
             return item.id_carrinho != id_car;
         })
         setCart(novoCart);
+        SalvarCart(novoCart);
     }
 
     function ValidarCupom() {
         setMsgCart("");
+        SalvarCart(cart);
 
         api.get(`v1/cupons/validacao`, {
             params: {
@@ -66,6 +87,20 @@ function CartProvider(props) {
 
     }
 
+    useEffect(() => {
+        //Recuperando informações do carrinho caso haja dados armazenados no localstorage. Toda vez que entrar na pagina verifica...
+        const dados = localStorage.getItem('sessionCart');
+
+        if (dados) {
+            setCart(JSON.parse(dados).itens);
+            setCupomCart(JSON.parse(dados).cupom);
+            setIdEstabelecimentoCart(JSON.parse(dados).id_estabelecimento);
+            setEntregaCart(JSON.parse(dados).entrega);
+            setIdCupomCart(JSON.parse(dados).id_cupom);
+
+        }
+    }, []);
+
 
     useEffect(() => {
         let soma = cart.reduce((a, b) => a + (b.vl_unit * b.qtd), 0);
@@ -88,7 +123,7 @@ function CartProvider(props) {
         }
     }, [subTotalCart]);
 
-    useEffect(() => {setMsgCart('')}, [cupomCart]);
+    useEffect(() => { setMsgCart('') }, [cupomCart]);
 
 
 
