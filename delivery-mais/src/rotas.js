@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/home";
 import Sidebar from './components/sidebar/index.jsx';
 import Busca from './pages/busca/index.jsx';
@@ -11,13 +11,13 @@ import Login from "./pages/login/index.jsx";
 import Cadastro from "./pages/cadastro/index.jsx";
 import TrocarEndereco from "./pages/trocar-endereco/index.jsx";
 import PrivateRoute from "./components/private-route/index.jsx";
+import Checkout from "./pages/checkout/inde.jsx";
 
 
 function Rotas() {
     return <>
-        <Sidebar />
-
         <BrowserRouter>
+            <Sidebar />
             <Routes>
                 <Route exact path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
                 <Route exact path="/busca" element={<PrivateRoute><Busca /></PrivateRoute>} />
@@ -29,9 +29,9 @@ function Rotas() {
                 <Route exact path="/login" element={<Login />} />
                 <Route exact path="/cadastro" element={<Cadastro />} />
                 <Route exact path="/trocar-endereco" element={<PrivateRoute><TrocarEndereco/></PrivateRoute>} />
-            </Routes>
+                <Route exact path="/checkout" element={<PrivateRoute><Checkout/></PrivateRoute>} />
+             </Routes>
         </BrowserRouter>
-
     </>
 };
 

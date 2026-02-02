@@ -1,15 +1,21 @@
+
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { CartContext } from '../../contexts/cart';
 import { Dock } from 'react-dock';
 import './style.css';
 import Produto from '../produto/sacola';
-import { useContext, useEffect, useState } from 'react';
-import { CartContext, CartProvider } from '../../contexts/cart';
 import Sacola from '../../assets/bag.png';
+
 
 
 
 function Sidebar(props) {
 
+
+    const navigate = useNavigate();
     const [show, setShow] = useState(false);
+
     const {
         cart,
         subTotalCart,
@@ -29,6 +35,13 @@ function Sidebar(props) {
             setShow(true);
         });
     }, []);
+
+
+    function FinalizarPedido() {
+        setShow(false);
+        navigate('/checkout');
+        
+    }
 
 
 
@@ -127,7 +140,7 @@ function Sidebar(props) {
                                 </h3>
                             </div>
 
-                            <button className='btn btn-danger rounded-0 align-itens-center btn-pedido'>Finalizar Pedido</button>
+                            <button onClick={FinalizarPedido} className='btn btn-danger rounded-0 align-itens-center btn-pedido'>Finalizar Pedido</button>
                         </div>
                     </div>
             }
