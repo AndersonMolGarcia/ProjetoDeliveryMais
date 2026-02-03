@@ -6,11 +6,11 @@ import ProdutoItemCheckbox from '../produto-item-checkbox';
 import { useContext, useEffect, useState } from 'react';
 import api from '../../../services/api.js';
 import { CartContext } from '../../../contexts/cart.jsx';
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 function ProdutoModal(props) {
 
-    const {cart, AddItemCart} = useContext(CartContext);
+    const { cart, AddItemCart } = useContext(CartContext);
 
     const [id_produto, setIdProduto] = useState("");
     const [nome, setNome] = useState("");
@@ -20,6 +20,9 @@ function ProdutoModal(props) {
     const [url_foto, setUrlFoto] = useState("");
 
     const [qtd, setQtd] = useState(1);
+
+    const [opcoes, setOpcoes] = useState([]);
+    const [grupos, setGrupos] = useState([]);
 
     function ListarDadosProduto() {
         api.get(`v1/produtos/${props.id_produto}`)
@@ -35,6 +38,42 @@ function ProdutoModal(props) {
                 console.log(props.id_produto)
             })
             .catch(err => console.error(err));
+
+
+    };
+
+    function ListarOpcoesProduto() {
+        api.get(`/v1/cardapios/opcoes/${props.id_produto}`)
+            .then(response => {
+                setOpcoes(response.data);
+
+                let gruposUnico = response.data.map(g => {
+                    return {
+                        id_opcao: g.id_opcao,
+                        id_produto: g.id_produto,
+                        descricao: g.descricao,
+                        ind_obrigatorio: g.ind_obrigatorio,
+                        qtd_max_escolha: g.qtd_max_escolha,
+                        ind_ativo: g.ind_ativo,
+                        ordem: g.ordem,
+                        selecao: []
+
+                    };
+                });
+
+                gruposUnico = gruposUnico.filter((item, index, arr) => {
+                    return arr.findIndex((t) => {
+                        return t.id_opcao === item.id_opcao
+                    }) === index;
+                });
+
+                setGrupos(gruposUnico);
+
+                console.log(gruposUnico);
+            })
+            .catch(err => {
+                console.log(err);
+            })
     }
 
     function ClickMenos() {
@@ -48,10 +87,16 @@ function ProdutoModal(props) {
 
     useEffect(() => {
 
-        if (!props.id_produto) return;
+        if (props.id_produto <= 0) {
+            return;
+        };
+
         ListarDadosProduto();
+        ListarOpcoesProduto();
 
     }, [props.id_produto]);
+
+
 
     function AddItem() {
         const item = {
@@ -61,13 +106,13 @@ function ProdutoModal(props) {
             descricao: nome,
             qtd: qtd,
             vl_unit: vl_promocao > 0 ? vl_promocao : vl_produto,
-            vl_total: (vl_promocao > 0 ? vl_promocao : vl_produto) * qtd, 
+            vl_total: (vl_promocao > 0 ? vl_promocao : vl_produto) * qtd,
             url_foto: url_foto,
             detalhes: [
 
             ]
         };
-       // console.log(item);
+        // console.log(item);
         AddItemCart(item);
         props.onRequestClose();
     }
@@ -122,15 +167,21 @@ function ProdutoModal(props) {
 
                     <div className='col-12 mb-4'>
                         {
-                            /*
-                            <ProdutoItemRadio 
-                                obrigatorio
-                                titulo="Escolha a borda"
-                            />
-                            <ProdutoItemCheckbox 
-                                titulo="Turbine sua pizza"
-                            />
-                            */
+                            grupos.map(grupo => {
+                                return (
+                                    grupo.qtd_max_escolha == 1 ? 
+                                    <ProdutoItemRadio
+                                        obrigatorio
+                                        titulo={grupo.descricao}
+                                    />
+                                    : <ProdutoItemCheckbox
+                                        titulo="Turbine sua pizza"
+                                    />
+                                );
+                            })
+
+
+
                         }
                     </div>
                 </div>
@@ -145,10 +196,10 @@ function ProdutoModal(props) {
                                 {qtd.toLocaleString('pt-BR', { minimumIntegerDigits: 2 })}
                             </span>
                             <button onClick={ClickMais} className='btn btn-outline-danger '><i className="fa-solid fa-plus"></i></button>
-                            <button onClick={AddItem} className='btn btn-danger ms-4'>                                
-                                Adicionar a sacola: ({                                    
-                                    new Intl.NumberFormat('pt-br', 
-                                        {style:'currency', currency:'BRL'}).format(qtd * (vl_promocao > 0 ? vl_promocao : vl_produto) )
+                            <button onClick={AddItem} className='btn btn-danger ms-4'>
+                                Adicionar a sacola: ({
+                                    new Intl.NumberFormat('pt-br',
+                                        { style: 'currency', currency: 'BRL' }).format(qtd * (vl_promocao > 0 ? vl_promocao : vl_produto))
                                 })
                             </button>
                         </div>
