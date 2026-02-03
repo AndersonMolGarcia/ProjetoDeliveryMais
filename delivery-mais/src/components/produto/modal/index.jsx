@@ -58,8 +58,10 @@ function ProdutoModal(props) {
             id_carrinho: uuidv4(),
             id_produto: id_produto,
             nome: nome,
+            descricao: nome,
             qtd: qtd,
             vl_unit: vl_promocao > 0 ? vl_promocao : vl_produto,
+            vl_total: (vl_promocao > 0 ? vl_promocao : vl_produto) * qtd, 
             url_foto: url_foto,
             detalhes: [
 
