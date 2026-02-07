@@ -17,25 +17,33 @@ function ProdutoItemRadio(props) {
 
             </div>
             <ul className="list-group list-group-flush">
-                <li className="list-group-item">
-                    <input className="form-check-input" type="radio" name="radioDefault" id="radioDefault1" />
-                        <label className="form-check-label ms-2" htmlFor="radioDefault1">
-                            Borda fina
-                        </label>
-                </li>
-                <li className="list-group-item">
-                    <input className="form-check-input" type="radio" name="radioDefault" id="radioDefault2" />
-                        <label className="form-check-label ms-2" htmlFor="radioDefault2">
-                            Borda grossa
-                        </label>
-                </li>
-                <li className="list-group-item">
-                    <input className="form-check-input" type="radio" name="radioDefault" id="radioDefault3" />
-                        <label className="form-check-label ms-2" htmlFor="radioDefault3">
-                            Borda recheada
-                        </label>
-                </li>
+                {
+                    props.opcoes.map(opcao => {
+                        return <li className="list-group-item d-flex justify-content-between align-items-center" key={opcao.id_item}>
+                            <div>
+                                <input
+                                    className="form-check-input"
+                                    type="radio"
+                                    name={`flexRadioDefault${opcao.id_opcao}`}
+                                    id={`flexRadioDefault${opcao.id_item}`}
+                                />
+                                <label className="form-check-label ms-2" htmlFor={`flexRadioDefault${opcao.id_item}`}>
+                                    {opcao.nome_item}
+                                </label>
+                            </div>
+                            <div>
+                                <span className='text-danger'>
+                                    {   
+                                        opcao.vl_item > 0 ?                                     
+                                            new Intl.NumberFormat('pt-br', {style:'currency', currency:'BRL'}).format(opcao.vl_item)
+                                        : null
+                                    }
+                                </span>
+                            </div>
+                        </li>
+                    })
 
+                }
             </ul>
 
         </div>

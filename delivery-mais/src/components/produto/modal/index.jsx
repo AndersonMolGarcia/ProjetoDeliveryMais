@@ -167,14 +167,23 @@ function ProdutoModal(props) {
 
                     <div className='col-12 mb-4'>
                         {
+                            
                             grupos.map(grupo => {
+
+                                let op = opcoes.filter((item, index, arr) => {
+                                    return item.id_opcao == grupo.id_opcao 
+                                });
+
                                 return (
                                     grupo.qtd_max_escolha == 1 ? 
                                     <ProdutoItemRadio
-                                        obrigatorio
+                                        key={grupo.id_opcao}
+                                        obrigatorio={grupo.ind_obrigatorio == "S" ? true : "false"}
                                         titulo={grupo.descricao}
+                                        opcoes={op}
                                     />
                                     : <ProdutoItemCheckbox
+                                        key={grupo.id_opcao}
                                         titulo="Turbine sua pizza"
                                     />
                                 );
