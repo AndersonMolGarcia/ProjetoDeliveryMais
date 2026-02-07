@@ -1,4 +1,3 @@
-import './style.css';
 import Navbar from '../../components/navbar';
 import { useContext, useEffect, useState } from 'react';
 import { CartContext } from '../../contexts/cart';

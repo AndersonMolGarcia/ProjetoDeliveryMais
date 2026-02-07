@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import './style.css';
 import Estabelecimento from '../../components/estabelecimento';
 import Navbar from '../../components/navbar';
 import api from '../../services/api.js';

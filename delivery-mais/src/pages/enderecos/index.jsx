@@ -1,4 +1,3 @@
-import './style.css';
 import Endereco from "../../components/endereco/lista/index.jsx";
 import Navbar from '../../components/navbar/index.jsx';
 import { useEffect, useState } from 'react';

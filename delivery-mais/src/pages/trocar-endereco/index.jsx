@@ -1,6 +1,5 @@
  import { useEffect, useState } from 'react';
  import { useNavigate } from 'react-router-dom';
- import './style.css';
 import Endereco from "../../components/endereco/lista/index.jsx";
 import Navbar from '../../components/navbar/index.jsx';
 import api from '../../services/api.js';

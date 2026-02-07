@@ -1,4 +1,3 @@
-import './style.css';
 import Navbar from '../../components/navbar';
 import Estabelecimento from '../../components/estabelecimento';
 import api from '../../services/api';

@@ -1,4 +1,3 @@
-import './style.css';
 import Navbar from '../../components/navbar';
 import Pedido from '../../components/pedido';
 import { useEffect, useState } from 'react';
