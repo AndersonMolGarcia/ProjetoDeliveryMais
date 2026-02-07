@@ -25,6 +25,7 @@ function ProdutoModal(props) {
     const [opcoes, setOpcoes] = useState([]);
     const [grupos, setGrupos] = useState([]);
     const [bloquearBtn, setBloquearBtn] = useState(true);
+    const [total, setTotal] = useState(0);
 
     function ListarDadosProduto() {
         api.get(`v1/produtos/${props.id_produto}`)
@@ -36,8 +37,8 @@ function ProdutoModal(props) {
                 setVlPromocao(response.data[0].vl_promocao)
                 setUrlFoto(response.data[0].url_foto)
                 setQtd(1);
-
-                //console.log(props.id_produto)
+                setTotal(response.data[0].vl_promocao > 0 ? response.data[0].vl_promocao : response.data[0].vl_produto);
+                
             })
             .catch(err => console.error(err));
 
@@ -104,18 +105,34 @@ function ProdutoModal(props) {
 
 
     function AddItem() {
+
+        let detalhes = [];
+        let vl_detalhes = 0;
+
+        grupos.map(item => {
+            item.selecao.map(sel => {
+
+                vl_detalhes = vl_detalhes + sel.vl_item;
+
+                detalhes.push({
+                    nome: sel.nome,
+                    id_item: sel.id_item,
+                    vl_item: sel.vl_item,
+                    ordem: sel.ordem
+                })
+            })    
+        })
+
         const item = {
             id_carrinho: uuidv4(),
             id_produto: id_produto,
             nome: nome,
             descricao: nome,
             qtd: qtd,
-            vl_unit: vl_promocao > 0 ? vl_promocao : vl_produto,
-            vl_total: (vl_promocao > 0 ? vl_promocao : vl_produto) * qtd,
+            vl_unit: vl_detalhes + ( vl_promocao > 0 ? vl_promocao : vl_produto),
+            vl_total: (vl_detalhes + (vl_promocao > 0 ? vl_promocao : vl_produto)) * qtd,
             url_foto: url_foto,
-            detalhes: [
-
-            ]
+            detalhes: detalhes
         };
         // console.log(item);
         AddItemCart(item);
@@ -133,8 +150,7 @@ function ProdutoModal(props) {
 
         setGrupos(g);
         HabilitaBotao(g);
-
-       // console.log(g);
+        CalculaTotal(g);
     };
 
     function SelecionaCheckBox(isChecked, op) {
@@ -160,8 +176,7 @@ function ProdutoModal(props) {
 
         setGrupos(g);
         HabilitaBotao(g);
-
-        //console.log(g);
+        CalculaTotal(g);
 
     };
 
@@ -177,6 +192,24 @@ function ProdutoModal(props) {
 
         setBloquearBtn(bloquear);
     }
+
+    function CalculaTotal(grupo) {
+        let vl_selecao = 0;
+        let vl_prod = vl_promocao > 0 ? vl_promocao : vl_produto;
+
+        grupo.map(item => {
+            item.selecao.map(sel => {
+                vl_selecao = vl_selecao + sel.vl_item;
+            })
+        });
+
+        setTotal((vl_selecao + vl_prod) * qtd);
+    };
+
+
+    useEffect(() => {
+        CalculaTotal(grupos);
+    }, [qtd]);
 
 
     return (
@@ -272,7 +305,7 @@ function ProdutoModal(props) {
                             <button onClick={AddItem} className='btn btn-danger ms-4' disabled={bloquearBtn}>
                                 Adicionar a sacola: ({
                                     new Intl.NumberFormat('pt-br',
-                                        { style: 'currency', currency: 'BRL' }).format(qtd * (vl_promocao > 0 ? vl_promocao : vl_produto))
+                                        { style: 'currency', currency: 'BRL' }).format(total)
                                 })
                             </button>
                         </div>
