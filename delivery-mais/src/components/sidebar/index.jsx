@@ -76,6 +76,7 @@ function Sidebar(props) {
                                         id_carrinho={prod.id_carrinho}
                                         url_foto={prod.url_foto}
                                         onClickRemover={RemoveItemCart}
+                                        detalhes={prod.detalhes}
                                     />
                                 })
                             }
