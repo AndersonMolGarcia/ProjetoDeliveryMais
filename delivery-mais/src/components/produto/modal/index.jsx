@@ -185,6 +185,7 @@ function ProdutoModal(props) {
                                     : <ProdutoItemCheckbox
                                         key={grupo.id_opcao}
                                         titulo="Turbine sua pizza"
+                                        opcoes={op}
                                     />
                                 );
                             })

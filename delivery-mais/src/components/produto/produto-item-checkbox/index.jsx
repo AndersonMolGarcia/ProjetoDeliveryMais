@@ -10,37 +10,38 @@ function ProdutoItemCheckbox(props) {
             </div>
 
             <ul className='list-group list-group-flush'>
-                <li className='list-group-item d-flex justify-content-between'>
-                    <div>
-                        <input className='form-check-input' type="checkbox" value={""} id="flexCheckboxDefault1" />
-                        <label className='form-check-label ms-2' htmlFor="flexCheckboxDefault1">Bacon</label>
-                    </div>
-                    <div>
-                        <span className='text-danger'>+ R$ 5,00</span>    
-                    </div>
-                </li>    
+                {
+                    props.opcoes.map(opcao => {
+                        return <li className='list-group-item d-flex justify-content-between' key={opcao.id_item}>
+                            <div>
+                                <input 
+                                    className='form-check-input' 
+                                    type="checkbox" value={""} 
+                                    id={`flexCheckboxDefault${opcao.id_item}`} 
+                                />
+                                <label className='form-check-label ms-2' htmlFor={`flexCheckboxDefault${opcao.id_item}`}>
+                                    {opcao.nome_item}    
+                                </label>
+                            </div>
+                            <div>
+                                {
+                                    opcao.vl_item > 0 ?
+                                        <span className='text-danger'>
+                                            {
+                                                new Intl.NumberFormat('pt-BR', {style:'currency', currency:'BRL'}).format(opcao.vl_item)
+                                            }
+                                        </span>
+                                    : null
+                                }
+                            </div>
+                        </li>
+                    })
+                }
 
-                <li className='list-group-item d-flex justify-content-between'>
-                    <div>
-                        <input className='form-check-input' type="checkbox" value={""} id="flexCheckboxDefault2" />
-                        <label className='form-check-label ms-2' htmlFor="flexCheckboxDefault2">Catupiry</label>
-                    </div>
-                    <div>
-                        <span className='text-danger'>+ R$ 2,00</span>    
-                    </div>
-                </li>   
 
-                <li className='list-group-item d-flex justify-content-between'>
-                    <div>
-                        <input className='form-check-input' type="checkbox" value={""} id="flexCheckboxDefault3" />
-                        <label className='form-check-label ms-2' htmlFor="flexCheckboxDefault3">Milho</label>
-                    </div>
-                    <div>
-                        <span className='text-danger'>+ R$ 1,50</span>    
-                    </div>
-                </li>   
+
             </ul>
-        </div>        
+        </div>
     );
 };
 
