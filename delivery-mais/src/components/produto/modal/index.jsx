@@ -7,6 +7,7 @@ import { useContext, useEffect, useState } from 'react';
 import api from '../../../services/api.js';
 import { CartContext } from '../../../contexts/cart.jsx';
 import { v4 as uuidv4 } from 'uuid';
+import { generatePath } from 'react-router-dom';
 
 function ProdutoModal(props) {
 
@@ -23,6 +24,7 @@ function ProdutoModal(props) {
 
     const [opcoes, setOpcoes] = useState([]);
     const [grupos, setGrupos] = useState([]);
+    const [bloquearBtn, setBloquearBtn] = useState(true);
 
     function ListarDadosProduto() {
         api.get(`v1/produtos/${props.id_produto}`)
@@ -35,7 +37,7 @@ function ProdutoModal(props) {
                 setUrlFoto(response.data[0].url_foto)
                 setQtd(1);
 
-                console.log(props.id_produto)
+                //console.log(props.id_produto)
             })
             .catch(err => console.error(err));
 
@@ -68,12 +70,14 @@ function ProdutoModal(props) {
                 });
 
                 setGrupos(gruposUnico);
-
-                console.log(gruposUnico);
+                 HabilitaBotao(gruposUnico);
+               // console.log(gruposUnico);
             })
             .catch(err => {
                 console.log(err);
             })
+
+           
     }
 
     function ClickMenos() {
@@ -93,8 +97,9 @@ function ProdutoModal(props) {
 
         ListarDadosProduto();
         ListarOpcoesProduto();
+        
 
-    }, [props.id_produto]);
+    }, [props.isOpen]);
 
 
 
@@ -127,8 +132,9 @@ function ProdutoModal(props) {
         g[objIndex].selecao = [op];
 
         setGrupos(g);
+        HabilitaBotao(g);
 
-        console.log(g);
+       // console.log(g);
     };
 
     function SelecionaCheckBox(isChecked, op) {
@@ -153,9 +159,23 @@ function ProdutoModal(props) {
         g[objIndex].selecao = s;
 
         setGrupos(g);
+        HabilitaBotao(g);
 
-        console.log(g);
+        //console.log(g);
 
+    };
+
+
+    function HabilitaBotao(grupo) {
+        let bloquear = false;
+
+        grupo.map(item => {
+            if (item.ind_obrigatorio == "S" && item.selecao.length == 0) {
+                bloquear = true;
+            }
+        });
+
+        setBloquearBtn(bloquear);
     }
 
 
@@ -249,7 +269,7 @@ function ProdutoModal(props) {
                                 {qtd.toLocaleString('pt-BR', { minimumIntegerDigits: 2 })}
                             </span>
                             <button onClick={ClickMais} className='btn btn-outline-danger '><i className="fa-solid fa-plus"></i></button>
-                            <button onClick={AddItem} className='btn btn-danger ms-4'>
+                            <button onClick={AddItem} className='btn btn-danger ms-4' disabled={bloquearBtn}>
                                 Adicionar a sacola: ({
                                     new Intl.NumberFormat('pt-br',
                                         { style: 'currency', currency: 'BRL' }).format(qtd * (vl_promocao > 0 ? vl_promocao : vl_produto))
