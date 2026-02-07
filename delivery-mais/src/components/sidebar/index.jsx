@@ -50,6 +50,8 @@ function Sidebar(props) {
         <Dock
             position='right'
             isVisible={show}
+            fluid={false}
+            size={420}
             onVisibleChange={(visible) => {
                 setShow(visible)
             }}
