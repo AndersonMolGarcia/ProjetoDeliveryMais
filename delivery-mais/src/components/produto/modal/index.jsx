@@ -117,6 +117,47 @@ function ProdutoModal(props) {
         props.onRequestClose();
     }
 
+    function SelecionaRadioButton(op) {
+        let g = grupos;
+       
+        // Descobrir o indice do grupo clicado
+        let objIndex = g.findIndex(obj => obj.id_opcao == op.id_opcao);
+
+        // Atualizar a informação do item naquele indice encontrado...
+        g[objIndex].selecao = [op];
+
+        setGrupos(g);
+
+        console.log(g);
+    };
+
+    function SelecionaCheckBox(isChecked, op) {
+        
+        let g = grupos;
+        let s = [];
+
+        // Descobrir o indice do grupo clicado...
+        let objIndex = g.findIndex(obj => obj.id_opcao == op.id_opcao);
+
+        // Extrai os itens selecionados...
+        s = g[objIndex].selecao;
+
+        // Verificar se deve inserir ou remover um item...
+        if (isChecked) {
+            s.push(op);
+        }else {
+            let objIndexSelecao = s.findIndex(obj => obj.id_item == op.id_item);
+            s.splice(objIndexSelecao, 1); // remove o item quando tirar o checked do checkbox
+        }
+
+        g[objIndex].selecao = s;
+
+        setGrupos(g);
+
+        console.log(g);
+
+    }
+
 
     return (
 
@@ -167,26 +208,28 @@ function ProdutoModal(props) {
 
                     <div className='col-12 mb-4'>
                         {
-                            
+
                             grupos.map(grupo => {
 
                                 let op = opcoes.filter((item, index, arr) => {
-                                    return item.id_opcao == grupo.id_opcao 
+                                    return item.id_opcao == grupo.id_opcao
                                 });
 
                                 return (
-                                    grupo.qtd_max_escolha == 1 ? 
-                                    <ProdutoItemRadio
-                                        key={grupo.id_opcao}
-                                        obrigatorio={grupo.ind_obrigatorio == "S" ? true : "false"}
-                                        titulo={grupo.descricao}
-                                        opcoes={op}
-                                    />
-                                    : <ProdutoItemCheckbox
-                                        key={grupo.id_opcao}
-                                        titulo="Turbine sua pizza"
-                                        opcoes={op}
-                                    />
+                                    grupo.qtd_max_escolha == 1 ?
+                                        <ProdutoItemRadio
+                                            key={grupo.id_opcao}
+                                            obrigatorio={grupo.ind_obrigatorio == "S" ? true : "false"}
+                                            titulo={grupo.descricao}
+                                            opcoes={op}
+                                            onClickItem={SelecionaRadioButton}
+                                        />
+                                        : <ProdutoItemCheckbox
+                                            key={grupo.id_opcao}
+                                            titulo="Turbine sua pizza"
+                                            opcoes={op}
+                                            onClickItem={SelecionaCheckBox}
+                                        />
                                 );
                             })
 

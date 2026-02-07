@@ -26,6 +26,13 @@ function ProdutoItemRadio(props) {
                                     type="radio"
                                     name={`flexRadioDefault${opcao.id_opcao}`}
                                     id={`flexRadioDefault${opcao.id_item}`}
+                                    onClick={(e) => props.onClickItem({
+                                        id_opcao: opcao.id_opcao,
+                                        nome: opcao.nome_item,
+                                        id_item: opcao.id_item,
+                                        vl_item: opcao.vl_item,
+                                        ordem: opcao.ordem
+                                    })}
                                 />
                                 <label className="form-check-label ms-2" htmlFor={`flexRadioDefault${opcao.id_item}`}>
                                     {opcao.nome_item}

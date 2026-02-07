@@ -14,13 +14,20 @@ function ProdutoItemCheckbox(props) {
                     props.opcoes.map(opcao => {
                         return <li className='list-group-item d-flex justify-content-between' key={opcao.id_item}>
                             <div>
-                                <input 
-                                    className='form-check-input' 
-                                    type="checkbox" value={""} 
-                                    id={`flexCheckboxDefault${opcao.id_item}`} 
+                                <input
+                                    className='form-check-input'
+                                    type="checkbox" value={""}
+                                    id={`flexCheckboxDefault${opcao.id_item}`}
+                                    onClick={(e) => props.onClickItem(e.target.checked, {
+                                        id_opcao: opcao.id_opcao,
+                                        nome: opcao.nome_item,
+                                        id_item: opcao.id_item,
+                                        vl_item: opcao.vl_item,
+                                        ordem: opcao.ordem
+                                    })}
                                 />
                                 <label className='form-check-label ms-2' htmlFor={`flexCheckboxDefault${opcao.id_item}`}>
-                                    {opcao.nome_item}    
+                                    {opcao.nome_item}
                                 </label>
                             </div>
                             <div>
@@ -28,10 +35,10 @@ function ProdutoItemCheckbox(props) {
                                     opcao.vl_item > 0 ?
                                         <span className='text-danger'>
                                             {
-                                                new Intl.NumberFormat('pt-BR', {style:'currency', currency:'BRL'}).format(opcao.vl_item)
+                                                new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(opcao.vl_item)
                                             }
                                         </span>
-                                    : null
+                                        : null
                                 }
                             </div>
                         </li>
